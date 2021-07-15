@@ -1,9 +1,12 @@
 package com.example.taskmanagementapplication.controller;
 
+import com.example.taskmanagementapplication.domain.dto.TaskDto;
+import com.example.taskmanagementapplication.domain.dto.TasksDto;
+import com.example.taskmanagementapplication.domain.request.EditTaskRequest;
 import com.example.taskmanagementapplication.service.TaskService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/task")
@@ -11,5 +14,30 @@ import org.springframework.web.bind.annotation.RestController;
 public class TaskController {
 
   private final TaskService taskService;
+
+  @GetMapping
+  public ResponseEntity<TasksDto> getTasksByDeskId() {
+
+    Long deskId = 1L;
+    return ResponseEntity.ok(new TasksDto(taskService.getByDeskId(deskId)));
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<TaskDto> getTask(@PathVariable Long id) {
+
+    return ResponseEntity.ok(TaskDto.of(taskService.getById(id)));
+  }
+
+  @PostMapping
+  public ResponseEntity<TaskDto> createTask(@RequestBody EditTaskRequest editTaskRequest) {
+
+    return ResponseEntity.ok(TaskDto.of(taskService.create(editTaskRequest)));
+  }
+
+  @PutMapping
+  public ResponseEntity<TaskDto> editTask(@RequestBody EditTaskRequest editTaskRequest) {
+
+    return ResponseEntity.ok(TaskDto.of(taskService.edit(editTaskRequest)));
+  }
 
 }
