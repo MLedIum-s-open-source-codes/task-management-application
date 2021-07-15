@@ -5,6 +5,7 @@ import com.example.taskmanagementapplication.domain.dto.DesksDto;
 import com.example.taskmanagementapplication.domain.request.EditDeskRequest;
 import com.example.taskmanagementapplication.service.DeskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,13 @@ public class DeskController {
   public ResponseEntity<DeskDto> editDesk(@RequestBody EditDeskRequest editDeskRequest) {
 
     return ResponseEntity.ok(DeskDto.of(deskService.edit(editDeskRequest)));
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<HttpStatus> hideDesk(@PathVariable Long id) {
+
+    deskService.deleteById(id);
+    return ResponseEntity.ok(HttpStatus.OK);
   }
 
 }

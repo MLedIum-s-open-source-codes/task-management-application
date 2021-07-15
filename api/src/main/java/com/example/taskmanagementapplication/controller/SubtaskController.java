@@ -5,6 +5,7 @@ import com.example.taskmanagementapplication.domain.dto.SubtasksDto;
 import com.example.taskmanagementapplication.domain.request.EditSubtaskRequest;
 import com.example.taskmanagementapplication.service.SubtaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,13 @@ public class SubtaskController {
   public ResponseEntity<SubtaskDto> editSubtask(@RequestBody EditSubtaskRequest editSubtaskRequest) {
 
     return ResponseEntity.ok(SubtaskDto.of(subtaskService.edit(editSubtaskRequest)));
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<HttpStatus> hideSubtask(@PathVariable Long id) {
+
+    subtaskService.deleteById(id);
+    return ResponseEntity.ok(HttpStatus.OK);
   }
 
 }
