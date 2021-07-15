@@ -2,12 +2,16 @@ package com.example.taskmanagementapplication.service.impl;
 
 import com.example.taskmanagementapplication.domain.request.EditDeskRequest;
 import com.example.taskmanagementapplication.entity.Desk;
+import com.example.taskmanagementapplication.entity.User;
 import com.example.taskmanagementapplication.repository.DeskRepository;
 import com.example.taskmanagementapplication.service.DeskService;
+import com.example.taskmanagementapplication.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.lang.String.format;
 
@@ -16,11 +20,19 @@ import static java.lang.String.format;
 public class DeskServiceImpl implements DeskService {
 
   private final DeskRepository deskRepository;
+  private final UserService userService;
 
   @Override
   public Desk create(EditDeskRequest editDeskRequest) {
+    Desk desk = Desk.builder()
+        .name(editDeskRequest.getName())
+        .description(editDeskRequest.getDescription())
+        .build();
 
-    return null;
+    User user = userService.getById(editDeskRequest.getUserId());
+    desk.getUsers().add(user);
+
+    return update(desk);
   }
 
   @Override
@@ -40,8 +52,24 @@ public class DeskServiceImpl implements DeskService {
 
   @Override
   public Desk edit(EditDeskRequest editDeskRequest) {
+    Desk desk = getById(editDeskRequest.getId());
 
-    return null;
+    if (editDeskRequest.getName() != null) {
+      desk.setName(editDeskRequest.getName());
+    }
+    if (editDeskRequest.getDescription() != null) {
+      desk.setDescription(editDeskRequest.getDescription());
+    }
+    if (editDeskRequest.getUserId() != null) {
+      User addingUser = userService.getById(editDeskRequest.getUserId());
+      desk.getUsers().add(addingUser);
+    }
+    if (editDeskRequest.getRemoveUserId() != null) {
+      User removingUser = userService.getById(editDeskRequest.getRemoveUserId());
+      desk.getUsers().remove(removingUser);
+    }
+
+    return update(desk);
   }
 
   @Override

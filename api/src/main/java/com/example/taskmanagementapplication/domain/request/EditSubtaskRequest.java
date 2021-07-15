@@ -11,6 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EditSubtaskRequest {
 
+  private Long id;
 
+  private String description;
+
+  private Boolean completed;
+
+  private Long taskId;
 
 }

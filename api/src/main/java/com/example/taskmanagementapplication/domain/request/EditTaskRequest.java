@@ -11,6 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EditTaskRequest {
 
+  private Long id;
 
+  private String name;
+
+  private String description;
+
+  private Boolean completed;
+
+  private Long deskId;
 
 }

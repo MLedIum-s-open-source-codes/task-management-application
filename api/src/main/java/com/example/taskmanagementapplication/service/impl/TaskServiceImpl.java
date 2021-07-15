@@ -1,8 +1,10 @@
 package com.example.taskmanagementapplication.service.impl;
 
 import com.example.taskmanagementapplication.domain.request.EditTaskRequest;
+import com.example.taskmanagementapplication.entity.Desk;
 import com.example.taskmanagementapplication.entity.Task;
 import com.example.taskmanagementapplication.repository.TaskRepository;
+import com.example.taskmanagementapplication.service.DeskService;
 import com.example.taskmanagementapplication.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,11 +18,20 @@ import static java.lang.String.format;
 public class TaskServiceImpl implements TaskService {
 
   private final TaskRepository taskRepository;
+  private final DeskService deskService;
 
   @Override
   public Task create(EditTaskRequest editTaskRequest) {
+    Task task = Task.builder()
+        .name(editTaskRequest.getName())
+        .description(editTaskRequest.getDescription())
+        .isCompleted(editTaskRequest.getCompleted())
+        .build();
 
-    return null;
+    Desk desk = deskService.getById(editTaskRequest.getDeskId());
+    task.setDesk(desk);
+
+    return update(task);
   }
 
   @Override
@@ -40,8 +51,23 @@ public class TaskServiceImpl implements TaskService {
 
   @Override
   public Task edit(EditTaskRequest editTaskRequest) {
+    Task task = getById(editTaskRequest.getId());
 
-    return null;
+    if (editTaskRequest.getName() != null) {
+      task.setName(editTaskRequest.getName());
+    }
+    if (editTaskRequest.getDescription() != null) {
+      task.setDescription(editTaskRequest.getDescription());
+    }
+    if (editTaskRequest.getCompleted() != null) {
+      task.setCompleted(editTaskRequest.getCompleted());
+    }
+    if (editTaskRequest.getDeskId() != null) {
+      Desk desk = deskService.getById(editTaskRequest.getId());
+      task.setDesk(desk);
+    }
+
+    return update(task);
   }
 
   @Override

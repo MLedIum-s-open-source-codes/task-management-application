@@ -11,6 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EditDeskRequest {
 
+  private Long id;
 
+  private String name;
+
+  private String description;
+
+  private Long userId;
+
+  private Long removeUserId;
 
 }

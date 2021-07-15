@@ -2,8 +2,10 @@ package com.example.taskmanagementapplication.service.impl;
 
 import com.example.taskmanagementapplication.domain.request.EditSubtaskRequest;
 import com.example.taskmanagementapplication.entity.Subtask;
+import com.example.taskmanagementapplication.entity.Task;
 import com.example.taskmanagementapplication.repository.SubtaskRepository;
 import com.example.taskmanagementapplication.service.SubtaskService;
+import com.example.taskmanagementapplication.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,19 @@ import static java.lang.String.format;
 public class SubtaskServiceImpl implements SubtaskService {
 
   private final SubtaskRepository subtaskRepository;
+  private final TaskService taskService;
 
   @Override
   public Subtask create(EditSubtaskRequest editSubtaskRequest) {
+    Subtask subtask = Subtask.builder()
+        .description(editSubtaskRequest.getDescription())
+        .isCompleted(editSubtaskRequest.getCompleted())
+        .build();
 
-    return null;
+    Task task = taskService.getById(editSubtaskRequest.getTaskId());
+    subtask.setTask(task);
+
+    return update(subtask);
   }
 
   @Override
@@ -40,8 +50,20 @@ public class SubtaskServiceImpl implements SubtaskService {
 
   @Override
   public Subtask edit(EditSubtaskRequest editSubtaskRequest) {
+    Subtask subtask = getById(editSubtaskRequest.getId());
 
-    return null;
+    if (editSubtaskRequest.getDescription() != null) {
+      subtask.setDescription(editSubtaskRequest.getDescription());
+    }
+    if (editSubtaskRequest.getCompleted() != null) {
+      subtask.setCompleted(editSubtaskRequest.getCompleted());
+    }
+    if (editSubtaskRequest.getTaskId() != null) {
+      Task task = taskService.getById(editSubtaskRequest.getId());
+      subtask.setTask(task);
+    }
+
+    return update(subtask);
   }
 
   @Override
