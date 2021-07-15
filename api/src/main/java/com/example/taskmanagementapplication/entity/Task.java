@@ -1,11 +1,9 @@
 package com.example.taskmanagementapplication.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -13,10 +11,11 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "/tasks")
+@Table(name = "tasks")
 public class Task {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String name;
@@ -26,9 +25,13 @@ public class Task {
   private boolean isCompleted;
 
   @ManyToOne
+  @JoinColumn(name = "desk_id",
+      referencedColumnName = "id")
   private Desk desk;
 
-  @OneToMany
-  private Set<Subtask> subtasks;
+  @Builder.Default
+  @OneToMany(mappedBy = "task")
+  @EqualsAndHashCode.Exclude
+  private Set<Subtask> subtasks = new HashSet<>();
 
 }

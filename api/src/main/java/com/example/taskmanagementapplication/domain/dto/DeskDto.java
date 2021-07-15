@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -18,14 +20,14 @@ public class DeskDto {
 
   private String description;
 
-  private TasksDto tasks;
+  private List<TaskDto> tasks;
 
   public static DeskDto of(Desk desk) {
     return DeskDto.builder()
         .id(desk.getId())
         .name(desk.getName())
         .description(desk.getDescription())
-        .tasks(new TasksDto(desk.getTasks().stream().toList()))
+        .tasks(desk.getTasks().stream().map(TaskDto::of).toList())
         .build();
   }
 

@@ -29,6 +29,7 @@ public class TaskServiceImpl implements TaskService {
         .build();
 
     Desk desk = deskService.getById(editTaskRequest.getDeskId());
+    desk.getTasks().add(task);
     task.setDesk(desk);
 
     return update(task);
@@ -53,6 +54,13 @@ public class TaskServiceImpl implements TaskService {
   public Task edit(EditTaskRequest editTaskRequest) {
     Task task = getById(editTaskRequest.getId());
 
+
+    if (editTaskRequest.getDeskId() != null) {
+      Desk oldDesk = task.getDesk();
+      oldDesk.getTasks().remove(task);
+      Desk newDesk = deskService.getById(editTaskRequest.getDeskId());
+      task.setDesk(newDesk);
+    }
     if (editTaskRequest.getName() != null) {
       task.setName(editTaskRequest.getName());
     }
@@ -61,10 +69,6 @@ public class TaskServiceImpl implements TaskService {
     }
     if (editTaskRequest.getCompleted() != null) {
       task.setCompleted(editTaskRequest.getCompleted());
-    }
-    if (editTaskRequest.getDeskId() != null) {
-      Desk desk = deskService.getById(editTaskRequest.getId());
-      task.setDesk(desk);
     }
 
     return update(task);

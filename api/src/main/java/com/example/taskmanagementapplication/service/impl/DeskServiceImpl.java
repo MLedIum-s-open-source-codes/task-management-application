@@ -7,14 +7,14 @@ import com.example.taskmanagementapplication.repository.DeskRepository;
 import com.example.taskmanagementapplication.service.DeskService;
 import com.example.taskmanagementapplication.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static java.lang.String.format;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class DeskServiceImpl implements DeskService {
@@ -30,6 +30,7 @@ public class DeskServiceImpl implements DeskService {
         .build();
 
     User user = userService.getById(editDeskRequest.getUserId());
+    user.getDesks().add(desk);
     desk.getUsers().add(user);
 
     return update(desk);

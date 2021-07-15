@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,14 +22,15 @@ public class TaskDto {
 
   private boolean isCompleted;
 
-  private SubtasksDto subtasks;
+  private List<SubtaskDto> subtasks;
 
   public static TaskDto of(Task task) {
     return TaskDto.builder()
+        .id(task.getId())
         .name(task.getName())
         .description(task.getDescription())
         .isCompleted(task.isCompleted())
-        .subtasks(new SubtasksDto(task.getSubtasks().stream().toList()))
+        .subtasks(task.getSubtasks().stream().map(SubtaskDto::of).toList())
         .build();
   }
 

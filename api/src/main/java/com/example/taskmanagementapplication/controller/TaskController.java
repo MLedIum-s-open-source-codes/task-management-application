@@ -16,9 +16,8 @@ public class TaskController {
   private final TaskService taskService;
 
   @GetMapping
-  public ResponseEntity<TasksDto> getTasksByDeskId() {
+  public ResponseEntity<TasksDto> getTasksByDeskId(@RequestBody Long deskId) {
 
-    Long deskId = 1L;
     return ResponseEntity.ok(new TasksDto(taskService.getByDeskId(deskId)));
   }
 

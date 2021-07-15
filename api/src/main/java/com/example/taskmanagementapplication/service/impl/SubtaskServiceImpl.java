@@ -52,15 +52,17 @@ public class SubtaskServiceImpl implements SubtaskService {
   public Subtask edit(EditSubtaskRequest editSubtaskRequest) {
     Subtask subtask = getById(editSubtaskRequest.getId());
 
+    if (editSubtaskRequest.getTaskId() != null) {
+      Task oldTask = subtask.getTask();
+      oldTask.getSubtasks().remove(subtask);
+      Task newTask = taskService.getById(editSubtaskRequest.getTaskId());
+      subtask.setTask(newTask);
+    }
     if (editSubtaskRequest.getDescription() != null) {
       subtask.setDescription(editSubtaskRequest.getDescription());
     }
     if (editSubtaskRequest.getCompleted() != null) {
       subtask.setCompleted(editSubtaskRequest.getCompleted());
-    }
-    if (editSubtaskRequest.getTaskId() != null) {
-      Task task = taskService.getById(editSubtaskRequest.getId());
-      subtask.setTask(task);
     }
 
     return update(subtask);

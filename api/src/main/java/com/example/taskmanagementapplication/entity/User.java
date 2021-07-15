@@ -1,14 +1,9 @@
 package com.example.taskmanagementapplication.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -16,14 +11,22 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "/users")
+@Table(name = "users")
 public class User {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String username;
 
+  //private String password;
+
+  @Builder.Default
   @ManyToMany
-  private Set<Desk> desks;
+  @JoinTable(name = "users_desks",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "desk_id"))
+  @EqualsAndHashCode.Exclude
+  private Set<Desk> desks = new HashSet<>();
 }

@@ -16,9 +16,8 @@ public class SubtaskController {
   private final SubtaskService subtaskService;
 
   @GetMapping
-  public ResponseEntity<SubtasksDto> getSubtasksByTaskId() {
+  public ResponseEntity<SubtasksDto> getSubtasksByTaskId(@RequestBody Long taskId) {
 
-    Long taskId = 1L;
     return ResponseEntity.ok(new SubtasksDto(subtaskService.getByTaskId(taskId)));
   }
 

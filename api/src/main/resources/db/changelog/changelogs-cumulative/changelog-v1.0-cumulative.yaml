@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: "db/changelog/tables/2021-07-15-create-table-users.sql"
+  - include:
+      file: "db/changelog/tables/2021-07-15-create-table-desks.sql"
+  - include:
+      file: "db/changelog/tables/2021-07-15-create-table-users_desks.sql"
+  - include:
+      file: "db/changelog/tables/2021-07-15-create-table-tasks.sql"
+  - include:
+      file: "db/changelog/tables/2021-07-15-create-table-subtasks.sql"

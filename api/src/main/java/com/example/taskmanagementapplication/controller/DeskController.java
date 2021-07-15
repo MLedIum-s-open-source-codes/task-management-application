@@ -16,9 +16,8 @@ public class DeskController {
   private final DeskService deskService;
 
   @GetMapping
-  public ResponseEntity<DesksDto> getDesksByUserId() {
+  public ResponseEntity<DesksDto> getDesksByUserId(@RequestHeader Long userId) {
 
-    Long userId = 1L;
     return ResponseEntity.ok(new DesksDto(deskService.getByUserId(userId)));
   }
 
