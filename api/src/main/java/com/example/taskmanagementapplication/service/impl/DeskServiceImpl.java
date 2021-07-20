@@ -1,6 +1,6 @@
 package com.example.taskmanagementapplication.service.impl;
 
-import com.example.taskmanagementapplication.domain.request.EditDeskRequest;
+import com.example.taskmanagementapplication.domain.dto.DeskDto;
 import com.example.taskmanagementapplication.entity.Desk;
 import com.example.taskmanagementapplication.entity.User;
 import com.example.taskmanagementapplication.repository.DeskRepository;
@@ -23,13 +23,13 @@ public class DeskServiceImpl implements DeskService {
   private final UserService userService;
 
   @Override
-  public Desk create(EditDeskRequest editDeskRequest) {
+  public Desk create(DeskDto deskDto, Long userId) {
     Desk desk = Desk.builder()
-        .name(editDeskRequest.getName())
-        .description(editDeskRequest.getDescription())
+        .name(deskDto.getName())
+        .description(deskDto.getDescription())
         .build();
 
-    User user = userService.getById(editDeskRequest.getUserId());
+    User user = userService.getById(userId);
     user.getDesks().add(desk);
     desk.getUsers().add(user);
 
@@ -52,22 +52,14 @@ public class DeskServiceImpl implements DeskService {
   }
 
   @Override
-  public Desk edit(EditDeskRequest editDeskRequest) {
-    Desk desk = getById(editDeskRequest.getId());
+  public Desk edit(DeskDto deskDto, Long userId) {
+    Desk desk = getById(deskDto.getId());
 
-    if (editDeskRequest.getName() != null) {
-      desk.setName(editDeskRequest.getName());
+    if (deskDto.getName() != null) {
+      desk.setName(deskDto.getName());
     }
-    if (editDeskRequest.getDescription() != null) {
-      desk.setDescription(editDeskRequest.getDescription());
-    }
-    if (editDeskRequest.getUserId() != null) {
-      User addingUser = userService.getById(editDeskRequest.getUserId());
-      desk.getUsers().add(addingUser);
-    }
-    if (editDeskRequest.getRemoveUserId() != null) {
-      User removingUser = userService.getById(editDeskRequest.getRemoveUserId());
-      desk.getUsers().remove(removingUser);
+    if (deskDto.getDescription() != null) {
+      desk.setDescription(deskDto.getDescription());
     }
 
     return update(desk);

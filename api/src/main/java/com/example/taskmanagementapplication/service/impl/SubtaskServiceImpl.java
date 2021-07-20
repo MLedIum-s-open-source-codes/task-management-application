@@ -1,6 +1,6 @@
 package com.example.taskmanagementapplication.service.impl;
 
-import com.example.taskmanagementapplication.domain.request.EditSubtaskRequest;
+import com.example.taskmanagementapplication.domain.dto.SubtaskDto;
 import com.example.taskmanagementapplication.entity.Subtask;
 import com.example.taskmanagementapplication.entity.Task;
 import com.example.taskmanagementapplication.repository.SubtaskRepository;
@@ -21,13 +21,13 @@ public class SubtaskServiceImpl implements SubtaskService {
   private final TaskService taskService;
 
   @Override
-  public Subtask create(EditSubtaskRequest editSubtaskRequest) {
+  public Subtask create(SubtaskDto subtaskDto) {
     Subtask subtask = Subtask.builder()
-        .description(editSubtaskRequest.getDescription())
-        .isCompleted(editSubtaskRequest.getCompleted())
+        .description(subtaskDto.getDescription())
+        .completed(subtaskDto.getCompleted())
         .build();
 
-    Task task = taskService.getById(editSubtaskRequest.getTaskId());
+    Task task = taskService.getById(subtaskDto.getTaskId());
     subtask.setTask(task);
 
     return update(subtask);
@@ -49,20 +49,20 @@ public class SubtaskServiceImpl implements SubtaskService {
   }
 
   @Override
-  public Subtask edit(EditSubtaskRequest editSubtaskRequest) {
-    Subtask subtask = getById(editSubtaskRequest.getId());
+  public Subtask edit(SubtaskDto subtaskDto) {
+    Subtask subtask = getById(subtaskDto.getId());
 
-    if (editSubtaskRequest.getTaskId() != null) {
+    if (subtaskDto.getTaskId() != null) {
       Task oldTask = subtask.getTask();
       oldTask.getSubtasks().remove(subtask);
-      Task newTask = taskService.getById(editSubtaskRequest.getTaskId());
+      Task newTask = taskService.getById(subtaskDto.getTaskId());
       subtask.setTask(newTask);
     }
-    if (editSubtaskRequest.getDescription() != null) {
-      subtask.setDescription(editSubtaskRequest.getDescription());
+    if (subtaskDto.getDescription() != null) {
+      subtask.setDescription(subtaskDto.getDescription());
     }
-    if (editSubtaskRequest.getCompleted() != null) {
-      subtask.setCompleted(editSubtaskRequest.getCompleted());
+    if (subtaskDto.getCompleted() != null) {
+      subtask.setCompleted(subtaskDto.getCompleted());
     }
 
     return update(subtask);

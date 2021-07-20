@@ -9,16 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EditTaskRequest {
+public class AuthenticationRequest {
 
-  private Long id;
+  private String username;
 
-  private String name;
-
-  private String description;
-
-  private Boolean completed;
-
-  private Long deskId;
+  private String password;
 
 }

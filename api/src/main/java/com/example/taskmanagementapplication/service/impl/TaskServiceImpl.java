@@ -1,6 +1,6 @@
 package com.example.taskmanagementapplication.service.impl;
 
-import com.example.taskmanagementapplication.domain.request.EditTaskRequest;
+import com.example.taskmanagementapplication.domain.dto.TaskDto;
 import com.example.taskmanagementapplication.entity.Desk;
 import com.example.taskmanagementapplication.entity.Task;
 import com.example.taskmanagementapplication.repository.TaskRepository;
@@ -21,18 +21,23 @@ public class TaskServiceImpl implements TaskService {
   private final DeskService deskService;
 
   @Override
-  public Task create(EditTaskRequest editTaskRequest) {
+  public Task create(TaskDto taskDto, Long userId) {
     Task task = Task.builder()
-        .name(editTaskRequest.getName())
-        .description(editTaskRequest.getDescription())
-        .isCompleted(editTaskRequest.getCompleted())
+        .name(taskDto.getName())
+        .description(taskDto.getDescription())
+        .completed(taskDto.getCompleted())
         .build();
 
-    Desk desk = deskService.getById(editTaskRequest.getDeskId());
+    Desk desk = deskService.getById(taskDto.getDeskId());
     desk.getTasks().add(task);
     task.setDesk(desk);
 
     return update(task);
+  }
+
+  @Override
+  public Task getByIdAndUserId(Long id, Long userId) {
+    return null;
   }
 
   @Override
@@ -45,39 +50,59 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
+  public List<Task> getByDeskIdAndUserId(Long deskId, Long userId) {
+    return null;
+  }
+
+  @Override
   public List<Task> getByDeskId(Long deskId) {
 
     return taskRepository.findAllByDeskId(deskId);
   }
 
   @Override
-  public Task edit(EditTaskRequest editTaskRequest) {
-    Task task = getById(editTaskRequest.getId());
+  public Task edit(TaskDto taskDto, Long userId) {
+    return null;
+  }
+
+  @Override
+  public Task edit(TaskDto taskDto) {
+    Task task = getById(taskDto.getId());
 
 
-    if (editTaskRequest.getDeskId() != null) {
+    if (taskDto.getDeskId() != null) {
       Desk oldDesk = task.getDesk();
       oldDesk.getTasks().remove(task);
-      Desk newDesk = deskService.getById(editTaskRequest.getDeskId());
+      Desk newDesk = deskService.getById(taskDto.getDeskId());
       task.setDesk(newDesk);
     }
-    if (editTaskRequest.getName() != null) {
-      task.setName(editTaskRequest.getName());
+    if (taskDto.getName() != null) {
+      task.setName(taskDto.getName());
     }
-    if (editTaskRequest.getDescription() != null) {
-      task.setDescription(editTaskRequest.getDescription());
+    if (taskDto.getDescription() != null) {
+      task.setDescription(taskDto.getDescription());
     }
-    if (editTaskRequest.getCompleted() != null) {
-      task.setCompleted(editTaskRequest.getCompleted());
+    if (taskDto.getCompleted() != null) {
+      task.setCompleted(taskDto.getCompleted());
     }
 
     return update(task);
   }
 
   @Override
+  public Task updateAndUserId(Task task, Long userId) {
+    return null;
+  }
+
+  @Override
   public Task update(Task task) {
 
     return taskRepository.save(task);
+  }
+
+  @Override
+  public void deleteByIdAndUserId(Long id, Long userId) {
+
   }
 
   @Override

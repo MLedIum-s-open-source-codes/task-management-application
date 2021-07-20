@@ -1,5 +1,6 @@
 package com.example.taskmanagementapplication.domain.dto;
 
+import com.example.taskmanagementapplication.entity.Desk;
 import com.example.taskmanagementapplication.entity.Task;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -20,7 +22,9 @@ public class TaskDto {
 
   private String description;
 
-  private boolean isCompleted;
+  private Boolean completed;
+
+  private Long deskId;
 
   private List<SubtaskDto> subtasks;
 
@@ -29,9 +33,22 @@ public class TaskDto {
         .id(task.getId())
         .name(task.getName())
         .description(task.getDescription())
-        .isCompleted(task.isCompleted())
-        .subtasks(task.getSubtasks().stream().map(SubtaskDto::of).toList())
+        .completed(task.getCompleted())
+        .subtasks(task.getSubtasks().stream().map(SubtaskDto::of).collect(Collectors.toList()))
         .build();
+  }
+
+  public Task toDomain(Desk desk) {
+    Task task = Task.builder()
+        .id(id)
+        .name(name)
+        .description(description)
+        .completed(completed)
+        .desk(desk)
+        .build();
+    task.setSubtasks(subtasks.stream().map(subtaskDto -> subtaskDto.toDomain(task)).collect(Collectors.toSet()));
+
+    return task;
   }
 
 }

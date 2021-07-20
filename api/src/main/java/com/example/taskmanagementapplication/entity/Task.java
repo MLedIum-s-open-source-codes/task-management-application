@@ -22,7 +22,7 @@ public class Task {
 
   private String description;
 
-  private boolean isCompleted;
+  private Boolean completed;
 
   @ManyToOne
   @JoinColumn(name = "desk_id",

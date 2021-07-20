@@ -21,7 +21,7 @@ public class Subtask {
 
   private String description;
 
-  private boolean isCompleted;
+  private boolean completed;
 
   @ManyToOne
   @JoinColumn(name = "task_id",
