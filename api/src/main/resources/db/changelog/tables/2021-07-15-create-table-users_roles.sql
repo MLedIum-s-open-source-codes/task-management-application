@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
 --changeset mledium:2021-07-15-create-table-users_roles
-CREATE TABLE `task_management`.`users_roles` (
+CREATE TABLE `users_roles` (
     `user_id` BIGINT NOT NULL,
     `role_id` BIGINT NOT NULL,
     PRIMARY KEY (`user_id`, `role_id`),

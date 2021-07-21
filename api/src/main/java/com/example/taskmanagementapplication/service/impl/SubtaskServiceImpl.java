@@ -20,64 +20,40 @@ public class SubtaskServiceImpl implements SubtaskService {
   private final SubtaskRepository subtaskRepository;
   private final TaskService taskService;
 
+
   @Override
   public Subtask create(SubtaskDto subtaskDto) {
-    Subtask subtask = Subtask.builder()
-        .description(subtaskDto.getDescription())
-        .completed(subtaskDto.getCompleted())
-        .build();
-
-    Task task = taskService.getById(subtaskDto.getTaskId());
-    subtask.setTask(task);
-
-    return update(subtask);
+    Task task = taskService.get(subtaskDto.getTaskId());
+    subtaskDto.setId(null);
+    return update(subtaskDto.toDomain(task));
   }
 
   @Override
-  public Subtask getById(Long id) {
-    Subtask subtask = subtaskRepository.getById(id);
-    if (subtask == null) {
-      throw new RuntimeException(format("Subtask with id '%s' was not found", id));
-    }
-    return subtask;
+  public Subtask get(Long id) {
+
+    return null;
   }
 
   @Override
-  public List<Subtask> getByTaskId(Long taskId) {
+  public List<Subtask> getAllByTaskId(Long taskId) {
 
-    return subtaskRepository.findAllByTaskId(taskId);
+    return null;
   }
 
   @Override
   public Subtask edit(SubtaskDto subtaskDto) {
-    Subtask subtask = getById(subtaskDto.getId());
 
-    if (subtaskDto.getTaskId() != null) {
-      Task oldTask = subtask.getTask();
-      oldTask.getSubtasks().remove(subtask);
-      Task newTask = taskService.getById(subtaskDto.getTaskId());
-      subtask.setTask(newTask);
-    }
-    if (subtaskDto.getDescription() != null) {
-      subtask.setDescription(subtaskDto.getDescription());
-    }
-    if (subtaskDto.getCompleted() != null) {
-      subtask.setCompleted(subtaskDto.getCompleted());
-    }
-
-    return update(subtask);
+    return null;
   }
 
   @Override
   public Subtask update(Subtask subtask) {
 
-    return subtaskRepository.save(subtask);
+    return null;
   }
 
   @Override
-  public void deleteById(Long id) {
+  public void delete(Long id) {
 
-    subtaskRepository.deleteById(id);
   }
-
 }

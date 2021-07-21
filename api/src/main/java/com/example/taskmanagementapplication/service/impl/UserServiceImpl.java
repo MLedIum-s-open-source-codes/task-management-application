@@ -3,7 +3,9 @@ package com.example.taskmanagementapplication.service.impl;
 import com.example.taskmanagementapplication.domain.dto.UserDto;
 import com.example.taskmanagementapplication.domain.request.AuthenticationRequest;
 import com.example.taskmanagementapplication.entity.User;
+import com.example.taskmanagementapplication.enumeration.ErrorTypeEnum;
 import com.example.taskmanagementapplication.enumeration.RoleEnum;
+import com.example.taskmanagementapplication.exception.CustomException;
 import com.example.taskmanagementapplication.repository.UserRepository;
 import com.example.taskmanagementapplication.service.RoleService;
 import com.example.taskmanagementapplication.service.UserService;
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User getById(Long id) {
+  public User get(Long id) {
     Optional<User> user = userRepository.findById(id);
     if (user.isEmpty()) {
       throw new RuntimeException(format("User with id '%s' was not found", id));
@@ -57,9 +59,12 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User edit(UserDto userDto) {
-    User user = getById(userDto.getId());
+    User user = get(userDto.getId());
+    if (userDto.getUsername() != null) {
+      user.setUsername(userDto.getUsername());
+    }
 
-    return update(userDto.toDomain());
+    return update(user);
   }
 
   @Override

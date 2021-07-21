@@ -7,16 +7,14 @@ import java.util.List;
 
 public interface DeskService {
 
-  Desk create(DeskDto deskDto, Long userId);
+  Desk create(DeskDto deskDto);
 
-  Desk getById(Long id);
+  Desk get(Long id);
 
-  List<Desk> getByUserId(Long userId);
-
-  Desk edit(DeskDto deskDto, Long userId);
+  Desk edit(DeskDto deskDto);
 
   Desk update(Desk desk);
 
-  void deleteById(Long id);
+  void delete(Long id);
 
 }

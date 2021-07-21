@@ -30,7 +30,10 @@ public class Task {
   private Desk desk;
 
   @Builder.Default
-  @OneToMany(mappedBy = "task")
+  @OneToMany(mappedBy = "task",
+      fetch = FetchType.EAGER,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true)
   @EqualsAndHashCode.Exclude
   private Set<Subtask> subtasks = new HashSet<>();
 

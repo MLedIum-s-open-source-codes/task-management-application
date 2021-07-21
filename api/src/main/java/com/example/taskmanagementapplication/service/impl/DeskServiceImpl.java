@@ -3,6 +3,8 @@ package com.example.taskmanagementapplication.service.impl;
 import com.example.taskmanagementapplication.domain.dto.DeskDto;
 import com.example.taskmanagementapplication.entity.Desk;
 import com.example.taskmanagementapplication.entity.User;
+import com.example.taskmanagementapplication.enumeration.ErrorTypeEnum;
+import com.example.taskmanagementapplication.exception.CustomException;
 import com.example.taskmanagementapplication.repository.DeskRepository;
 import com.example.taskmanagementapplication.service.DeskService;
 import com.example.taskmanagementapplication.service.UserService;
@@ -11,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.String.format;
 
@@ -20,40 +23,25 @@ import static java.lang.String.format;
 public class DeskServiceImpl implements DeskService {
 
   private final DeskRepository deskRepository;
-  private final UserService userService;
 
   @Override
-  public Desk create(DeskDto deskDto, Long userId) {
-    Desk desk = Desk.builder()
-        .name(deskDto.getName())
-        .description(deskDto.getDescription())
-        .build();
-
-    User user = userService.getById(userId);
-    user.getDesks().add(desk);
-    desk.getUsers().add(user);
-
-    return update(desk);
+  public Desk create(DeskDto deskDto) {
+    deskDto.setId(null);
+    return update(deskDto.toDomain());
   }
 
   @Override
-  public Desk getById(Long id) {
-    Desk desk = deskRepository.getById(id);
-    if (desk == null) {
-      throw new RuntimeException(format("Desk with id '%s' was not found", id));
+  public Desk get(Long id) {
+    Optional<Desk> desk = deskRepository.findById(id);
+    if (desk.isEmpty()) {
+      throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Desk with id '%s' was not found", id));
     }
-    return desk;
+    return desk.get();
   }
 
   @Override
-  public List<Desk> getByUserId(Long userId) {
-
-    return deskRepository.findAllByUserId(userId);
-  }
-
-  @Override
-  public Desk edit(DeskDto deskDto, Long userId) {
-    Desk desk = getById(deskDto.getId());
+  public Desk edit(DeskDto deskDto) {
+    Desk desk = get(deskDto.getId());
 
     if (deskDto.getName() != null) {
       desk.setName(deskDto.getName());
@@ -72,9 +60,8 @@ public class DeskServiceImpl implements DeskService {
   }
 
   @Override
-  public void deleteById(Long id) {
+  public void delete(Long id) {
 
     deskRepository.deleteById(id);
   }
-
 }

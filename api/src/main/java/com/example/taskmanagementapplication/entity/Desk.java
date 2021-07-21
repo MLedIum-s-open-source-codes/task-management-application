@@ -23,12 +23,17 @@ public class Desk {
   private String description;
 
   @Builder.Default
-  @ManyToMany(mappedBy = "desks")
+  @OneToMany(mappedBy = "desk",
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
   @EqualsAndHashCode.Exclude
-  private Set<User> users = new HashSet<>();
+  private Set<DeskUser> deskUsers = new HashSet<>();
 
   @Builder.Default
-  @OneToMany(mappedBy = "desk")
+  @OneToMany(mappedBy = "desk",
+      fetch = FetchType.EAGER,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true)
   @EqualsAndHashCode.Exclude
   private Set<Task> tasks = new HashSet<>();
 

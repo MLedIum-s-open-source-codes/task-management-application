@@ -13,3 +13,10 @@ databaseChangeLog:
       file: "db/changelog/tables/2021-07-15-create-table-tasks.sql"
   - include:
       file: "db/changelog/tables/2021-07-15-create-table-subtasks.sql"
+
+  - include:
+      file: "db/changelog/data/2021-07-15-insera-into-table-users.sql"
+  - include:
+      file: "db/changelog/data/2021-07-15-insera-into-table-roles.sql"
+  - include:
+      file: "db/changelog/data/2021-07-15-insera-into-table-users_roles.sql"

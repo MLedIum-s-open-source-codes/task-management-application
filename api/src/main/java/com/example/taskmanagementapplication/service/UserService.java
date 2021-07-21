@@ -8,7 +8,7 @@ public interface UserService {
 
   User create(AuthenticationRequest authenticationRequest);
 
-  User getById(Long id);
+  User get(Long id);
 
   User getByUsername(String username);
 

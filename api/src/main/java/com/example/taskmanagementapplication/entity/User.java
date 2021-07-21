@@ -29,7 +29,7 @@ public class User {
   @Builder.Default
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
   @EqualsAndHashCode.Exclude
-  private Set<Desk> desks = new HashSet<>();
+  private Set<DeskUser> userDesks = new HashSet<>();
 
   @Builder.Default
   @EqualsAndHashCode.Exclude

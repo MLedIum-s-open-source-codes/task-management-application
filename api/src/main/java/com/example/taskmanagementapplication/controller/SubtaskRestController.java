@@ -12,40 +12,55 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Secured({"ROLE_USER"})
-@RequestMapping("/subtask")
+@RequestMapping("/desks/{deskId}/tasks/{taskId}/subtasks")
 @RequiredArgsConstructor
 public class SubtaskRestController {
 
   private final SubtaskService subtaskService;
 
   @PostMapping
-  public ResponseEntity<?> createSubtask(@RequestBody SubtaskDto subtaskDto, @UserId Long userId) {
+  public ResponseEntity<SubtaskDto> createSubtask(
+      @RequestBody SubtaskDto subtaskDto,
+      @UserId Long userId) {
 
-    return ResponseEntity.ok().build();
+    // проверка
+    return ResponseEntity.ok(SubtaskDto.of(subtaskService.create(subtaskDto)));
   }
 
   @GetMapping
-  public ResponseEntity<?> getSubtasksByTaskId(@RequestBody Long taskId, @UserId Long userId) {
+  public ResponseEntity<SubtasksDto> getSubtasksByTaskId(
+      @PathVariable Long taskId,
+      @UserId Long userId) {
 
-    return ResponseEntity.ok().build();
+    // проверка
+    return ResponseEntity.ok(new SubtasksDto(subtaskService.getAllByTaskId(taskId)));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getSubtask(@PathVariable Long id, @UserId Long userId) {
+  public ResponseEntity<SubtaskDto> getSubtask(
+      @PathVariable Long id,
+      @UserId Long userId) {
 
-    return ResponseEntity.ok().build();
+    // проверка
+    return ResponseEntity.ok(SubtaskDto.of(subtaskService.get(id)));
   }
 
   @PutMapping
-  public ResponseEntity<?> editSubtask(@RequestBody SubtaskDto subtaskDto, @UserId Long userId) {
+  public ResponseEntity<SubtaskDto> editSubtask(
+      @RequestBody SubtaskDto subtaskDto,
+      @UserId Long userId) {
 
-    return ResponseEntity.ok().build();
+    // проверка
+    return ResponseEntity.ok(SubtaskDto.of(subtaskService.edit(subtaskDto)));
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> hideSubtask(@PathVariable Long id, @UserId Long userId) {
+  public ResponseEntity<HttpStatus> hideSubtask(
+      @PathVariable Long id,
+      @UserId Long userId) {
 
-    subtaskService.deleteById(id);
+    // проверка
+    subtaskService.delete(id);
     return ResponseEntity.ok().build();
   }
 

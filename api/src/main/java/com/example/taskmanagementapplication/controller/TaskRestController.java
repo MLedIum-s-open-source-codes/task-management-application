@@ -13,40 +13,57 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Secured({"ROLE_USER"})
-@RequestMapping("/task")
+@RequestMapping("/desks/{deskId}/tasks")
 @RequiredArgsConstructor
 public class TaskRestController {
 
   private final TaskService taskService;
 
   @PostMapping
-  public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto, @UserId Long userId) {
+  public ResponseEntity<TaskDto> createTask(
+      @PathVariable Long deskId,
+      @RequestBody TaskDto taskDto,
+      @UserId Long userId) {
 
-    return ResponseEntity.ok().build();
+    // проверка
+    taskDto.setDeskId(deskId);
+    return ResponseEntity.ok(TaskDto.of(taskService.create(taskDto)));
   }
 
   @GetMapping
-  public ResponseEntity<TasksDto> getTasksByDeskId(@RequestBody Long deskId, @UserId Long userId) {
+  public ResponseEntity<TasksDto> getTasksByDeskId(
+      @PathVariable Long deskId,
+      @UserId Long userId) {
 
-    return ResponseEntity.ok().build();
+    // проверка
+    return ResponseEntity.ok(new TasksDto(taskService.getAllByDeskId(deskId)));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<TaskDto> getTask(@PathVariable Long id, @UserId Long userId) {
+  public ResponseEntity<TaskDto> getTask(
+      @PathVariable Long id,
+      @UserId Long userId) {
 
-    return ResponseEntity.ok().build();
+    // проверка
+    return ResponseEntity.ok(TaskDto.of(taskService.get(id)));
   }
 
-  @PutMapping
-  public ResponseEntity<TaskDto> editTask(@RequestBody TaskDto taskDto, @UserId Long userId) {
+  @PutMapping("/{id}")
+  public ResponseEntity<TaskDto> editTask(
+      @RequestBody TaskDto taskDto,
+      @UserId Long userId) {
 
-    return ResponseEntity.ok().build();
+    // проверка
+    return ResponseEntity.ok(TaskDto.of(taskService.edit(taskDto)));
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<HttpStatus> hideTask(@PathVariable Long id, @UserId Long userId) {
+  public ResponseEntity<HttpStatus> deleteTask(
+      @PathVariable Long id,
+      @UserId Long userId) {
 
-    taskService.deleteById(id);
+    // проверка
+    taskService.delete(id);
     return ResponseEntity.ok().build();
   }
 

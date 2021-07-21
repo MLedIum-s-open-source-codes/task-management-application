@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -18,13 +19,10 @@ public class UserDto {
 
   private String username;
 
-  private List<DeskDto> desks;
-
   public static UserDto of(User user) {
     return UserDto.builder()
         .id(user.getId())
         .username(user.getUsername())
-        //.desks(new DesksDto(user.getDesks().stream().toList()))
         .build();
   }
 
