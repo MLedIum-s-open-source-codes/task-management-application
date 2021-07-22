@@ -34,7 +34,7 @@ public class TaskDto {
         .name(task.getName())
         .description(task.getDescription())
         .completed(task.getCompleted())
-        .subtasks(task.getSubtasks().stream().map(SubtaskDto::of).collect(Collectors.toList()))
+        .subtasks(task.getSubtasks() == null ? null : task.getSubtasks().stream().map(SubtaskDto::of).collect(Collectors.toList()))
         .build();
   }
 
@@ -46,7 +46,7 @@ public class TaskDto {
         .completed(completed)
         .desk(desk)
         .build();
-    task.setSubtasks(subtasks.stream().map(subtaskDto -> subtaskDto.toDomain(task)).collect(Collectors.toSet()));
+    task.setSubtasks(subtasks == null ? null : subtasks.stream().map(subtaskDto -> subtaskDto.toDomain(task)).collect(Collectors.toSet()));
 
     return task;
   }

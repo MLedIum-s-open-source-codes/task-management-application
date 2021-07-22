@@ -31,29 +31,38 @@ public class SubtaskServiceImpl implements SubtaskService {
   @Override
   public Subtask get(Long id) {
 
-    return null;
+    return subtaskRepository.getById(id);
   }
 
   @Override
   public List<Subtask> getAllByTaskId(Long taskId) {
 
-    return null;
+    return subtaskRepository.getAllByTaskId(taskId);
   }
 
   @Override
   public Subtask edit(SubtaskDto subtaskDto) {
+    Subtask subtask = get(subtaskDto.getId());
 
-    return null;
+    if (subtaskDto.getDescription() != null) {
+      subtask.setDescription(subtaskDto.getDescription());
+    }
+    if (subtaskDto.getCompleted() != null) {
+      subtask.setCompleted(subtaskDto.getCompleted());
+    }
+
+    return update(subtask);
   }
 
   @Override
   public Subtask update(Subtask subtask) {
 
-    return null;
+    return subtaskRepository.save(subtask);
   }
 
   @Override
   public void delete(Long id) {
 
+    subtaskRepository.deleteById(id);
   }
 }

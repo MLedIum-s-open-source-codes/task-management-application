@@ -30,7 +30,7 @@ public class DeskDto {
         .id(desk.getId())
         .name(desk.getName())
         .description(desk.getDescription())
-        .tasks(desk.getTasks().stream().map(TaskDto::of).collect(Collectors.toList()))
+        .tasks(desk.getTasks() == null ? null : desk.getTasks().stream().map(TaskDto::of).collect(Collectors.toList()))
         .users(desk.getDeskUsers().stream().map(
             deskUser -> UserDto.of(deskUser.getUser())
         ).collect(Collectors.toList()))
@@ -43,7 +43,7 @@ public class DeskDto {
         .name(name)
         .description(description)
         .build();
-    //desk.setTasks(tasks.stream().map(taskDto -> taskDto.toDomain(desk)).collect(Collectors.toSet()));
+    desk.setTasks(tasks == null ? null : tasks.stream().map(taskDto -> taskDto.toDomain(desk)).collect(Collectors.toSet()));
 
     return desk;
   }

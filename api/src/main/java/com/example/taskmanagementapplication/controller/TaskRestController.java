@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+@Log4j2
 @RestController
 @Secured({"ROLE_USER"})
 @RequestMapping("/desks/{deskId}/tasks")
@@ -25,7 +26,7 @@ public class TaskRestController {
       @RequestBody TaskDto taskDto,
       @UserId Long userId) {
 
-    // проверка
+    log.info(deskId);
     taskDto.setDeskId(deskId);
     return ResponseEntity.ok(TaskDto.of(taskService.create(taskDto)));
   }
@@ -35,7 +36,6 @@ public class TaskRestController {
       @PathVariable Long deskId,
       @UserId Long userId) {
 
-    // проверка
     return ResponseEntity.ok(new TasksDto(taskService.getAllByDeskId(deskId)));
   }
 
@@ -44,7 +44,6 @@ public class TaskRestController {
       @PathVariable Long id,
       @UserId Long userId) {
 
-    // проверка
     return ResponseEntity.ok(TaskDto.of(taskService.get(id)));
   }
 
@@ -53,7 +52,6 @@ public class TaskRestController {
       @RequestBody TaskDto taskDto,
       @UserId Long userId) {
 
-    // проверка
     return ResponseEntity.ok(TaskDto.of(taskService.edit(taskDto)));
   }
 
@@ -62,8 +60,7 @@ public class TaskRestController {
       @PathVariable Long id,
       @UserId Long userId) {
 
-    // проверка
-    taskService.delete(id);
+    //taskService.delete(id);
     return ResponseEntity.ok().build();
   }
 

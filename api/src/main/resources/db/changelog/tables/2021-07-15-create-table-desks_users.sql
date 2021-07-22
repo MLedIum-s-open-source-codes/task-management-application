@@ -7,7 +7,7 @@ CREATE TABLE `desks_users` (
     `user_id` BIGINT NOT NULL,
     `hidden` TINYINT NOT NULL DEFAULT 0,
     `owner` TINYINT NOT NULL DEFAULT 0,
-    PRIMARY KEY (`desk_id`, `user_id`),
+    PRIMARY KEY (`id`, `desk_id`, `user_id`),
     FOREIGN KEY (desk_id) REFERENCES desks (id),
     FOREIGN KEY (user_id) REFERENCES users (id));
 --rollback drop table desks_users;

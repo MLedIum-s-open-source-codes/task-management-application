@@ -42,7 +42,9 @@ public class DeskUserServiceImpl implements DeskUserService {
         .user(user)
         .owner(owner)
         .build();
-
+    user.getUserDesks().add(deskUser);
+    desk.getDeskUsers().add(deskUser);
+    deskService.update(desk);
     return update(deskUser);
   }
 

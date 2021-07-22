@@ -13,6 +13,6 @@ public interface SubtaskRepository extends JpaRepository<Subtask, Long> {
   @Override
   Optional<Subtask> findById(Long id);
 
-  List<Subtask> findAllByTaskId(Long taskId);
+  List<Subtask> getAllByTaskId(Long taskId);
 
 }

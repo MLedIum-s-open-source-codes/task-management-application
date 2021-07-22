@@ -27,7 +27,11 @@ public class User {
   private boolean enabled = false;
 
   @Builder.Default
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+  @OneToMany(
+      mappedBy = "user",
+      fetch = FetchType.LAZY,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true)
   @EqualsAndHashCode.Exclude
   private Set<DeskUser> userDesks = new HashSet<>();
 

@@ -12,7 +12,6 @@ import java.util.Optional;
 @Repository
 public interface DeskRepository extends JpaRepository<Desk, Long> {
 
-  @Override
   Optional<Desk> findById(Long id);
 
   @Query("select d from Desk d join User u where u.id = :id")

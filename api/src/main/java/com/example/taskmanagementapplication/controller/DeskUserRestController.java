@@ -28,7 +28,7 @@ public class DeskUserRestController {
       @PathVariable Long deskId,
       @RequestParam Long addingUserId,
       @UserId Long userId) {
-
+    ////
     if (!deskUserService.get(deskId, userId).getOwner()) {
       throw new CustomException(ErrorTypeEnum.ACCESS_DENIED, format("User with id '%s' hasn't access to this action", userId));
     }
@@ -40,7 +40,7 @@ public class DeskUserRestController {
       @PathVariable Long deskId,
       @RequestParam Long removeUserId,
       @UserId Long userId) {
-
+    ////
     if (!deskUserService.get(deskId, userId).getOwner() || removeUserId != userId) {
       throw new CustomException(ErrorTypeEnum.ACCESS_DENIED, format("User with id '%s' hasn't access to this action", userId));
     }

@@ -5,11 +5,13 @@ import com.example.taskmanagementapplication.domain.dto.SubtaskDto;
 import com.example.taskmanagementapplication.domain.dto.SubtasksDto;
 import com.example.taskmanagementapplication.service.SubtaskService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+@Log4j2
 @RestController
 @Secured({"ROLE_USER"})
 @RequestMapping("/desks/{deskId}/tasks/{taskId}/subtasks")
@@ -20,15 +22,20 @@ public class SubtaskRestController {
 
   @PostMapping
   public ResponseEntity<SubtaskDto> createSubtask(
+      @PathVariable Long deskId,
+      @PathVariable Long taskId,
       @RequestBody SubtaskDto subtaskDto,
       @UserId Long userId) {
 
     // проверка
+    log.info(subtaskDto);
+    subtaskDto.setTaskId(taskId);
     return ResponseEntity.ok(SubtaskDto.of(subtaskService.create(subtaskDto)));
   }
 
   @GetMapping
   public ResponseEntity<SubtasksDto> getSubtasksByTaskId(
+      @PathVariable Long deskId,
       @PathVariable Long taskId,
       @UserId Long userId) {
 
@@ -38,6 +45,8 @@ public class SubtaskRestController {
 
   @GetMapping("/{id}")
   public ResponseEntity<SubtaskDto> getSubtask(
+      @PathVariable Long deskId,
+      @PathVariable Long taskId,
       @PathVariable Long id,
       @UserId Long userId) {
 
@@ -45,22 +54,29 @@ public class SubtaskRestController {
     return ResponseEntity.ok(SubtaskDto.of(subtaskService.get(id)));
   }
 
-  @PutMapping
+  @PutMapping("/{id}")
   public ResponseEntity<SubtaskDto> editSubtask(
+      @PathVariable Long deskId,
+      @PathVariable Long taskId,
+      @PathVariable Long id,
       @RequestBody SubtaskDto subtaskDto,
       @UserId Long userId) {
 
     // проверка
+    subtaskDto.setId(id);
+    subtaskDto.setTaskId(taskId);
     return ResponseEntity.ok(SubtaskDto.of(subtaskService.edit(subtaskDto)));
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<HttpStatus> hideSubtask(
+      @PathVariable Long deskId,
+      @PathVariable Long taskId,
       @PathVariable Long id,
       @UserId Long userId) {
 
-    // проверка
-    subtaskService.delete(id);
+
+    //subtaskService.delete(id);
     return ResponseEntity.ok().build();
   }
 

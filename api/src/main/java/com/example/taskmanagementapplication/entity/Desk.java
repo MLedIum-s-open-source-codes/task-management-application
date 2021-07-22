@@ -25,6 +25,7 @@ public class Desk {
   @Builder.Default
   @OneToMany(mappedBy = "desk",
       fetch = FetchType.EAGER,
+      cascade = CascadeType.ALL,
       orphanRemoval = true)
   @EqualsAndHashCode.Exclude
   private Set<DeskUser> deskUsers = new HashSet<>();
