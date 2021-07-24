@@ -19,8 +19,6 @@ public class DeskDto {
 
   private String name;
 
-  private String description;
-
   private List<TaskDto> tasks;
 
   private List<UserDto> users;
@@ -29,7 +27,6 @@ public class DeskDto {
     return DeskDto.builder()
         .id(desk.getId())
         .name(desk.getName())
-        .description(desk.getDescription())
         .tasks(desk.getTasks() == null ? null : desk.getTasks().stream().map(TaskDto::of).collect(Collectors.toList()))
         .users(desk.getDeskUsers().stream().map(
             deskUser -> UserDto.of(deskUser.getUser())
@@ -41,7 +38,6 @@ public class DeskDto {
     Desk desk = Desk.builder()
         .id(id)
         .name(name)
-        .description(description)
         .build();
     desk.setTasks(tasks == null ? null : tasks.stream().map(taskDto -> taskDto.toDomain(desk)).collect(Collectors.toSet()));
 

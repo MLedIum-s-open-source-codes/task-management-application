@@ -20,8 +20,6 @@ public class Desk {
 
   private String name;
 
-  private String description;
-
   @Builder.Default
   @OneToMany(mappedBy = "desk",
       fetch = FetchType.EAGER,

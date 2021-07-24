@@ -46,9 +46,6 @@ public class DeskServiceImpl implements DeskService {
     if (deskDto.getName() != null) {
       desk.setName(deskDto.getName());
     }
-    if (deskDto.getDescription() != null) {
-      desk.setDescription(deskDto.getDescription());
-    }
 
     return update(desk);
   }

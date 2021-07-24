@@ -48,12 +48,20 @@ public class TaskServiceImpl implements TaskService {
       task.setName(taskDto.getName());
     }
 
-    if (taskDto.getDescription() != null) {
-      task.setDescription(taskDto.getDescription());
+    if (taskDto.getNote() != null) {
+      task.setNote(taskDto.getNote());
     }
 
     if (taskDto.getCompleted() != null) {
       task.setCompleted(taskDto.getCompleted());
+    }
+
+    if (taskDto.getImportant() != null) {
+      task.setImportant(taskDto.getImportant());
+    }
+
+    if (taskDto.getCompletionDate() != null) {
+      task.setCompletionDate(taskDto.getCompletionDate());
     }
 
     return update(task);

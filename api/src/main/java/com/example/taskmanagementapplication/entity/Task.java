@@ -3,6 +3,7 @@ package com.example.taskmanagementapplication.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,9 +21,13 @@ public class Task {
 
   private String name;
 
-  private String description;
+  private String note;
 
   private Boolean completed;
+
+  private Boolean important;
+
+  private Instant completionDate;
 
   @ManyToOne
   @JoinColumn(name = "desk_id",

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,9 +21,13 @@ public class TaskDto {
 
   private String name;
 
-  private String description;
+  private String note;
 
   private Boolean completed;
+
+  private Boolean important;
+
+  private Instant completionDate;
 
   private Long deskId;
 
@@ -32,8 +37,9 @@ public class TaskDto {
     return TaskDto.builder()
         .id(task.getId())
         .name(task.getName())
-        .description(task.getDescription())
+        .note(task.getNote())
         .completed(task.getCompleted())
+        .completionDate(task.getCompletionDate())
         .subtasks(task.getSubtasks() == null ? null : task.getSubtasks().stream().map(SubtaskDto::of).collect(Collectors.toList()))
         .build();
   }
@@ -42,8 +48,9 @@ public class TaskDto {
     Task task = Task.builder()
         .id(id)
         .name(name)
-        .description(description)
+        .note(note)
         .completed(completed)
+        .completionDate(completionDate)
         .desk(desk)
         .build();
     task.setSubtasks(subtasks == null ? null : subtasks.stream().map(subtaskDto -> subtaskDto.toDomain(task)).collect(Collectors.toSet()));
