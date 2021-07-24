@@ -3,6 +3,8 @@ package com.example.taskmanagementapplication.service.impl;
 import com.example.taskmanagementapplication.domain.dto.TaskDto;
 import com.example.taskmanagementapplication.entity.Desk;
 import com.example.taskmanagementapplication.entity.Task;
+import com.example.taskmanagementapplication.enumeration.ErrorTypeEnum;
+import com.example.taskmanagementapplication.exception.CustomException;
 import com.example.taskmanagementapplication.repository.TaskRepository;
 import com.example.taskmanagementapplication.service.DeskService;
 import com.example.taskmanagementapplication.service.TaskService;
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.String.format;
 
@@ -30,8 +33,11 @@ public class TaskServiceImpl implements TaskService {
 
   @Override
   public Task get(Long id) {
-
-    return taskRepository.getById(id);
+    Optional<Task> taskOptional = taskRepository.findById(id);
+    if (taskOptional.isEmpty()) {
+      throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Task with id '%s' was not found", id));
+    }
+    return taskOptional.get();
   }
 
   @Override
@@ -47,19 +53,15 @@ public class TaskServiceImpl implements TaskService {
     if (taskDto.getName() != null) {
       task.setName(taskDto.getName());
     }
-
     if (taskDto.getNote() != null) {
       task.setNote(taskDto.getNote());
     }
-
     if (taskDto.getCompleted() != null) {
       task.setCompleted(taskDto.getCompleted());
     }
-
     if (taskDto.getImportant() != null) {
       task.setImportant(taskDto.getImportant());
     }
-
     if (taskDto.getCompletionDate() != null) {
       task.setCompletionDate(taskDto.getCompletionDate());
     }
@@ -76,6 +78,7 @@ public class TaskServiceImpl implements TaskService {
   @Override
   public void delete(Long id) {
     Task task = get(id);
-    taskRepository.delete(task);
+    task.getDesk().getTasks().remove(task);
+    taskRepository.deleteById(id);
   }
 }

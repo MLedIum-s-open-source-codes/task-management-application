@@ -39,6 +39,7 @@ public class TaskDto {
         .name(task.getName())
         .note(task.getNote())
         .completed(task.getCompleted())
+        .important(task.getImportant())
         .completionDate(task.getCompletionDate())
         .subtasks(task.getSubtasks() == null ? null : task.getSubtasks().stream().map(SubtaskDto::of).collect(Collectors.toList()))
         .build();
@@ -50,6 +51,7 @@ public class TaskDto {
         .name(name)
         .note(note)
         .completed(completed)
+        .important(important)
         .completionDate(completionDate)
         .desk(desk)
         .build();

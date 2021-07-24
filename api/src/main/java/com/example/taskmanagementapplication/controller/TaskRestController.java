@@ -60,7 +60,7 @@ public class TaskRestController {
       @PathVariable Long id,
       @UserId Long userId) {
 
-    //taskService.delete(id);
+    taskService.delete(id);
     return ResponseEntity.ok().build();
   }
 

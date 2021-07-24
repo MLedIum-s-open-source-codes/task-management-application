@@ -14,7 +14,4 @@ public interface DeskRepository extends JpaRepository<Desk, Long> {
 
   Optional<Desk> findById(Long id);
 
-  @Query("select d from Desk d join User u where u.id = :id")
-  List<Desk> findAllByUserId(@Param("id") Long userId);
-
 }

@@ -20,6 +20,4 @@ public interface DeskUserService {
 
   void delete(Long deskId, Long userId);
 
-  void delete(DeskUser deskUser);
-
 }

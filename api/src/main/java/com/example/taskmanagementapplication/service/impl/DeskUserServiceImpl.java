@@ -37,14 +37,14 @@ public class DeskUserServiceImpl implements DeskUserService {
   public DeskUser create(Long deskId, Long userId, Boolean owner) {
     Desk desk = deskService.get(deskId);
     User user = userService.get(userId);
+    if (deskUserRepository.existsByDesk_IdAndUser_Id(deskId, userId)) {
+      throw new CustomException(ErrorTypeEnum.ALREADY_EXIST, format("User with id '%s' already attached to the desk with id '%s'", userId, deskId));
+    }
     DeskUser deskUser = DeskUser.builder()
         .desk(desk)
         .user(user)
         .owner(owner)
         .build();
-    user.getUserDesks().add(deskUser);
-    desk.getDeskUsers().add(deskUser);
-    deskService.update(desk);
     return update(deskUser);
   }
 
@@ -80,13 +80,7 @@ public class DeskUserServiceImpl implements DeskUserService {
   @Override
   public void delete(Long deskId, Long userId) {
     DeskUser deskUser = get(deskId, userId);
-    delete(deskUser);
-  }
-
-  @Override
-  public void delete(DeskUser deskUser) {
-
-    deskUserRepository.delete(deskUser);
+    deskUserRepository.deleteByDesk_IdAndUser_Id(deskId, userId);
   }
 
 }

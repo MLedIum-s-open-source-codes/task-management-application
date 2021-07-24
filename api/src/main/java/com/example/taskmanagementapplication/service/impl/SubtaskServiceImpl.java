@@ -3,6 +3,8 @@ package com.example.taskmanagementapplication.service.impl;
 import com.example.taskmanagementapplication.domain.dto.SubtaskDto;
 import com.example.taskmanagementapplication.entity.Subtask;
 import com.example.taskmanagementapplication.entity.Task;
+import com.example.taskmanagementapplication.enumeration.ErrorTypeEnum;
+import com.example.taskmanagementapplication.exception.CustomException;
 import com.example.taskmanagementapplication.repository.SubtaskRepository;
 import com.example.taskmanagementapplication.service.SubtaskService;
 import com.example.taskmanagementapplication.service.TaskService;
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.String.format;
 
@@ -30,8 +33,11 @@ public class SubtaskServiceImpl implements SubtaskService {
 
   @Override
   public Subtask get(Long id) {
-
-    return subtaskRepository.getById(id);
+    Optional<Subtask> subtaskOptional = subtaskRepository.findById(id);
+    if (subtaskOptional.isEmpty()) {
+      throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Subtask with id '%s' was not found", id));
+    }
+    return subtaskOptional.get();
   }
 
   @Override
@@ -62,7 +68,8 @@ public class SubtaskServiceImpl implements SubtaskService {
 
   @Override
   public void delete(Long id) {
-
+    Subtask subtask = get(id);
+    subtask.getTask().getSubtasks().remove(subtask);
     subtaskRepository.deleteById(id);
   }
 }

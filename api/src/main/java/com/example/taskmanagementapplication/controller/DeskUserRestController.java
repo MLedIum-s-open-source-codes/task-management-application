@@ -1,9 +1,8 @@
 package com.example.taskmanagementapplication.controller;
 
 import com.example.taskmanagementapplication.annotation.UserId;
-import com.example.taskmanagementapplication.domain.dto.DeskDto;
 import com.example.taskmanagementapplication.domain.dto.UserDto;
-import com.example.taskmanagementapplication.entity.Desk;
+import com.example.taskmanagementapplication.domain.request.DeskUserRequest;
 import com.example.taskmanagementapplication.enumeration.ErrorTypeEnum;
 import com.example.taskmanagementapplication.exception.CustomException;
 import com.example.taskmanagementapplication.service.DeskUserService;
@@ -26,25 +25,23 @@ public class DeskUserRestController {
   @PostMapping
   public ResponseEntity<UserDto> addUser(
       @PathVariable Long deskId,
-      @RequestParam Long addingUserId,
+      @RequestBody DeskUserRequest deskUserRequest,
       @UserId Long userId) {
-    ////
     if (!deskUserService.get(deskId, userId).getOwner()) {
       throw new CustomException(ErrorTypeEnum.ACCESS_DENIED, format("User with id '%s' hasn't access to this action", userId));
     }
-    return ResponseEntity.ok(UserDto.of(deskUserService.create(deskId, addingUserId).getUser()));
+    return ResponseEntity.ok(UserDto.of(deskUserService.create(deskId, deskUserRequest.getUserId()).getUser()));
   }
 
   @DeleteMapping
   public ResponseEntity<HttpStatus> removeUser(
       @PathVariable Long deskId,
-      @RequestParam Long removeUserId,
+      @RequestBody DeskUserRequest deskUserRequest,
       @UserId Long userId) {
-    ////
-    if (!deskUserService.get(deskId, userId).getOwner() || removeUserId != userId) {
+    if (!deskUserService.get(deskId, userId).getOwner() && deskUserRequest.getUserId() != userId) {
       throw new CustomException(ErrorTypeEnum.ACCESS_DENIED, format("User with id '%s' hasn't access to this action", userId));
     }
-    deskUserService.delete(deskId, removeUserId);
+    deskUserService.delete(deskId, deskUserRequest.getUserId());
     return ResponseEntity.ok().build();
   }
 
