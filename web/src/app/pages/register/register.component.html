@@ -1,0 +1,11 @@
+<div class="modal-auth">
+  <form id="register" class="auth" [formGroup]="registerForm">
+    <fieldset class="clearfix">
+      <p><span class="fontawesome-user"></span><input formControlName="username" type="text" placeholder="Username" required></p>
+      <p><span class="fontawesome-lock"></span><input formControlName="password" type="password" placeholder="Password" required></p>
+      <p><span class="fontawesome-lock"></span><input formControlName="confirmPassword" type="password" placeholder="Confirm password" required></p>
+      <p><input type="submit" value="SIGH UP" (click)="onSubmit()"></p>
+    </fieldset>
+  </form>
+  <p>Already registered? &nbsp;&nbsp;<a routerLink="/login">Sign In<span class="fontawesome-arrow-right"></span></a></p>
+</div>
