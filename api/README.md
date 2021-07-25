@@ -10,7 +10,7 @@
 
 Заранее настройте базу данных MySQL:
 \
-Создайте схему: questionnaire
+Создайте схему: task_management
 \
 и пользователя:
 \
@@ -18,7 +18,7 @@ username: test_user
 \
 password: password
 \
-или укажите в application.properties свои данные
+или укажите в application.properties свои данные для базы данных
 
 Далее запустите проект в IntelliJ IDEA и нажмите run
 
