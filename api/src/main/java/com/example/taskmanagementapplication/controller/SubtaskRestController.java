@@ -3,6 +3,7 @@ package com.example.taskmanagementapplication.controller;
 import com.example.taskmanagementapplication.annotation.UserId;
 import com.example.taskmanagementapplication.domain.dto.SubtaskDto;
 import com.example.taskmanagementapplication.domain.dto.SubtasksDto;
+import com.example.taskmanagementapplication.service.DeskUserService;
 import com.example.taskmanagementapplication.service.SubtaskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class SubtaskRestController {
 
   private final SubtaskService subtaskService;
+  private final DeskUserService deskUserService;
 
   @PostMapping
   public ResponseEntity<SubtaskDto> createSubtask(
@@ -27,8 +29,8 @@ public class SubtaskRestController {
       @RequestBody SubtaskDto subtaskDto,
       @UserId Long userId) {
 
-    // проверка
-    log.info(subtaskDto);
+    deskUserService.get(deskId, userId);
+
     subtaskDto.setTaskId(taskId);
     return ResponseEntity.ok(SubtaskDto.of(subtaskService.create(subtaskDto)));
   }
@@ -39,7 +41,8 @@ public class SubtaskRestController {
       @PathVariable Long taskId,
       @UserId Long userId) {
 
-    // проверка
+    deskUserService.get(deskId, userId);
+
     return ResponseEntity.ok(new SubtasksDto(subtaskService.getAllByTaskId(taskId)));
   }
 
@@ -50,7 +53,8 @@ public class SubtaskRestController {
       @PathVariable Long id,
       @UserId Long userId) {
 
-    // проверка
+    deskUserService.get(deskId, userId);
+
     return ResponseEntity.ok(SubtaskDto.of(subtaskService.get(id)));
   }
 
@@ -62,21 +66,23 @@ public class SubtaskRestController {
       @RequestBody SubtaskDto subtaskDto,
       @UserId Long userId) {
 
-    // проверка
+    deskUserService.get(deskId, userId);
+
     subtaskDto.setId(id);
     subtaskDto.setTaskId(taskId);
     return ResponseEntity.ok(SubtaskDto.of(subtaskService.edit(subtaskDto)));
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<HttpStatus> hideSubtask(
+  public ResponseEntity<HttpStatus> deleteSubtask(
       @PathVariable Long deskId,
       @PathVariable Long taskId,
       @PathVariable Long id,
       @UserId Long userId) {
 
+    deskUserService.get(deskId, userId);
 
-    //subtaskService.delete(id);
+    subtaskService.delete(id);
     return ResponseEntity.ok().build();
   }
 

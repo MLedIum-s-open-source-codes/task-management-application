@@ -16,6 +16,8 @@ public interface DeskUserService {
 
   List<DeskUser> getAllByDeskId(Long deskId);
 
+  List<DeskUser> changeOwner(Long deskId, Long newOwnerId, Long oldOwnerId);
+
   DeskUser update(DeskUser deskUser);
 
   void delete(Long deskId, Long userId);

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +70,23 @@ public class DeskUserServiceImpl implements DeskUserService {
   public List<DeskUser> getAllByDeskId(Long deskId) {
 
     return deskUserRepository.getAllByDesk_Id(deskId);
+  }
+
+  @Override
+  public List<DeskUser> changeOwner(Long deskId, Long newOwnerId, Long oldOwnerId) {
+    DeskUser oldOnwer = get(deskId, oldOwnerId);
+    oldOnwer.setOwner(false);
+
+    DeskUser newOwner = get(deskId, newOwnerId);
+    newOwner.setOwner(true);
+
+    List<DeskUser> list = new ArrayList<>();
+    list.add(newOwner);
+    list.add(oldOnwer);
+
+    deskUserRepository.saveAll(list);
+
+    return getAllByDeskId(deskId);
   }
 
   @Override

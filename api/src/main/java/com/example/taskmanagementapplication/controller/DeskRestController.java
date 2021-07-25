@@ -26,7 +26,7 @@ public class DeskRestController {
   private final DeskUserService deskUserService;
 
   @PostMapping
-  public ResponseEntity<?> createDesk(
+  public ResponseEntity<DeskDto> createDesk(
       @RequestBody DeskDto deskDto,
       @UserId Long userId) {
 
@@ -46,11 +46,11 @@ public class DeskRestController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getDesk(
+  public ResponseEntity<DeskDto> getDesk(
       @PathVariable Long id,
       @UserId Long userId) {
 
-    return ResponseEntity.ok(DeskDto.of(deskService.get(id)));
+    return ResponseEntity.ok(DeskDto.of(deskUserService.get(id, userId).getDesk()));
   }
 
   @PutMapping("/{id}")
@@ -58,6 +58,8 @@ public class DeskRestController {
       @PathVariable Long id,
       @RequestBody DeskDto deskDto,
       @UserId Long userId) {
+
+    deskUserService.get(id, userId);
 
     deskDto.setId(id);
     return ResponseEntity.ok(DeskDto.of(deskService.edit(deskDto)));
@@ -67,6 +69,8 @@ public class DeskRestController {
   public ResponseEntity<HttpStatus> deleteDesk(
       @PathVariable Long id,
       @UserId Long userId) {
+
+    deskUserService.get(id, userId);
 
     deskService.delete(id);
     return ResponseEntity.ok().build();

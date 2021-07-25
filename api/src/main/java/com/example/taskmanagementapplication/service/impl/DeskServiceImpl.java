@@ -2,17 +2,14 @@ package com.example.taskmanagementapplication.service.impl;
 
 import com.example.taskmanagementapplication.domain.dto.DeskDto;
 import com.example.taskmanagementapplication.entity.Desk;
-import com.example.taskmanagementapplication.entity.User;
 import com.example.taskmanagementapplication.enumeration.ErrorTypeEnum;
 import com.example.taskmanagementapplication.exception.CustomException;
 import com.example.taskmanagementapplication.repository.DeskRepository;
 import com.example.taskmanagementapplication.service.DeskService;
-import com.example.taskmanagementapplication.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 import static java.lang.String.format;

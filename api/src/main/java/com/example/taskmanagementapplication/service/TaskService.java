@@ -1,8 +1,6 @@
 package com.example.taskmanagementapplication.service;
 
-import com.example.taskmanagementapplication.domain.dto.SubtaskDto;
 import com.example.taskmanagementapplication.domain.dto.TaskDto;
-import com.example.taskmanagementapplication.entity.Subtask;
 import com.example.taskmanagementapplication.entity.Task;
 
 import java.util.List;

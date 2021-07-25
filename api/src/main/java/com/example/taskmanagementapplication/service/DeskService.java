@@ -3,8 +3,6 @@ package com.example.taskmanagementapplication.service;
 import com.example.taskmanagementapplication.domain.dto.DeskDto;
 import com.example.taskmanagementapplication.entity.Desk;
 
-import java.util.List;
-
 public interface DeskService {
 
   Desk create(DeskDto deskDto);
