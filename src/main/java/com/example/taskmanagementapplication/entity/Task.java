@@ -42,4 +42,14 @@ public class Task {
   @EqualsAndHashCode.Exclude
   private Set<Subtask> subtasks = new HashSet<>();
 
+  @Builder.Default
+  @EqualsAndHashCode.Exclude
+  @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+  @JoinTable(name = "tasks_users",
+      joinColumns = @JoinColumn(name = "task_id",
+          referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "user_id",
+          referencedColumnName = "id"))
+  private Set<User> users = new HashSet<>();
+
 }

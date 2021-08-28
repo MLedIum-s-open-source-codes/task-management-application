@@ -1,7 +1,10 @@
 package com.example.taskmanagementapplication.entity;
 
 import com.example.taskmanagementapplication.enumeration.RoleEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -34,6 +37,14 @@ public class User {
       orphanRemoval = true)
   @EqualsAndHashCode.Exclude
   private Set<DeskUser> userDesks = new HashSet<>();
+
+  @JsonIgnore
+  @Builder.Default
+  @EqualsAndHashCode.Exclude
+  @ManyToMany(mappedBy = "users",
+      fetch = FetchType.LAZY)
+  @Fetch(value = FetchMode.SUBSELECT)
+  private Set<Task> tasks = new HashSet<>();
 
   @Builder.Default
   @EqualsAndHashCode.Exclude

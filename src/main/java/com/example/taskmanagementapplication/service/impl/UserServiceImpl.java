@@ -3,7 +3,9 @@ package com.example.taskmanagementapplication.service.impl;
 import com.example.taskmanagementapplication.domain.dto.UserDto;
 import com.example.taskmanagementapplication.domain.request.AuthenticationRequest;
 import com.example.taskmanagementapplication.entity.User;
+import com.example.taskmanagementapplication.enumeration.ErrorTypeEnum;
 import com.example.taskmanagementapplication.enumeration.RoleEnum;
+import com.example.taskmanagementapplication.exception.CustomException;
 import com.example.taskmanagementapplication.repository.UserRepository;
 import com.example.taskmanagementapplication.service.RoleService;
 import com.example.taskmanagementapplication.service.UserService;
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService {
   public User get(Long id) {
     Optional<User> user = userRepository.findById(id);
     if (user.isEmpty()) {
-      throw new RuntimeException(format("User with id '%s' was not found", id));
+      throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("User with id '%s' was not found", id));
     }
     return user.get();
   }
@@ -50,7 +52,7 @@ public class UserServiceImpl implements UserService {
   public User getByUsername(String username) {
     Optional<User> user = userRepository.findByUsername(username);
     if (user.isEmpty()) {
-      throw new RuntimeException(format("User with username '%s' was not found", username));
+      throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("User with username '%s' was not found", username));
     }
     return user.get();
   }
