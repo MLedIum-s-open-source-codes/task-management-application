@@ -3,10 +3,10 @@ package com.example.taskmanagementapplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class TaskManagementApplicationTests {
 
-  @Test
+  //@Test
   void contextLoads() {
   }
 

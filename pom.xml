@@ -12,7 +12,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>task-management-application</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.3-SNAPSHOT</version>
     <name>task-management-application</name>
     <description>Task management application API</description>
 
@@ -144,6 +144,21 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <!--
+                    <image>
+                        <name>mledium/${project.artifactId}:${project.version}</name>
+                    </image>
+                    -->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.build.sourceDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
                 </configuration>
             </plugin>
         </plugins>
