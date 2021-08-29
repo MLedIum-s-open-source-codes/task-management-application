@@ -2,6 +2,7 @@ package com.example.taskmanagementapplication.domain.dto;
 
 import com.example.taskmanagementapplication.entity.Desk;
 import com.example.taskmanagementapplication.entity.Task;
+import com.example.taskmanagementapplication.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,6 +34,8 @@ public class TaskDto {
 
   private List<SubtaskDto> subtasks;
 
+  private List<UserDto> users;
+
   public static TaskDto of(Task task) {
     return TaskDto.builder()
         .id(task.getId())
@@ -42,6 +45,9 @@ public class TaskDto {
         .important(task.getImportant())
         .completionDate(task.getCompletionDate())
         .subtasks(task.getSubtasks() == null ? null : task.getSubtasks().stream().map(SubtaskDto::of).collect(Collectors.toList()))
+        .users(task.getUsers().stream().map(
+            taskUser -> UserDto.of(taskUser)
+        ).collect(Collectors.toList()))
         .build();
   }
 
