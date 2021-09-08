@@ -28,13 +28,13 @@ public class TaskDto {
 
   private Boolean important;
 
-  private Instant completionDate;
+  private Instant completeBeforeDate;
 
   private Long deskId;
 
   private List<SubtaskDto> subtasks;
 
-  private List<UserDto> users;
+  private List<UserDto> assignedUsers;
 
   public static TaskDto of(Task task) {
     return TaskDto.builder()
@@ -43,10 +43,10 @@ public class TaskDto {
         .note(task.getNote())
         .completed(task.getCompleted())
         .important(task.getImportant())
-        .completionDate(task.getCompletionDate())
+        .completeBeforeDate(task.getCompleteBeforeDate())
         .subtasks(task.getSubtasks() == null ? null : task.getSubtasks().stream().map(SubtaskDto::of).collect(Collectors.toList()))
-        .users(task.getUsers().stream().map(
-            taskUser -> UserDto.of(taskUser)
+        .assignedUsers(task.getTaskUsers().stream().map(
+            taskUser -> UserDto.of(taskUser.getUser())
         ).collect(Collectors.toList()))
         .build();
   }
@@ -58,7 +58,7 @@ public class TaskDto {
         .note(note)
         .completed(completed)
         .important(important)
-        .completionDate(completionDate)
+        .completeBeforeDate(completeBeforeDate)
         .desk(desk)
         .build();
     task.setSubtasks(subtasks == null ? null : subtasks.stream().map(subtaskDto -> subtaskDto.toDomain(task)).collect(Collectors.toSet()));

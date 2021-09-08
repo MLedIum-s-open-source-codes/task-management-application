@@ -12,11 +12,15 @@ public interface DeskUserService {
 
   DeskUser get(Long deskId, Long userId);
 
-  List<DeskUser> getAllByUserId(Long userId);
+  List<DeskUser> getAllByUserId(Long id);
 
-  List<DeskUser> getAllByDeskId(Long deskId);
+  List<DeskUser> getAllByDeskId(Long id);
 
   List<DeskUser> changeOwner(Long deskId, Long newOwnerId, Long oldOwnerId);
+
+  void checkContainsDeskWithIdUserWithId(Long deskId, Long userId);
+
+  void checkIsDeskOwner(Long deskId, Long userId);
 
   DeskUser update(DeskUser deskUser);
 

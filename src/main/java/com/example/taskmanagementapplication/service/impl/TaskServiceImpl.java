@@ -23,21 +23,20 @@ public class TaskServiceImpl implements TaskService {
   private final TaskRepository taskRepository;
   private final DeskService deskService;
 
-
   @Override
-  public Task create(TaskDto taskDto) {
-    Desk desk = deskService.get(taskDto.getDeskId());
-    taskDto.setId(null);
-    return update(taskDto.toDomain(desk));
+  public Task create(TaskDto dto) {
+    Desk desk = deskService.get(dto.getDeskId());
+    dto.setId(null);
+    return update(dto.toDomain(desk));
   }
 
   @Override
   public Task get(Long id) {
-    Optional<Task> taskOptional = taskRepository.findById(id);
-    if (taskOptional.isEmpty()) {
+    Optional<Task> optional = taskRepository.findById(id);
+    if (optional.isEmpty()) {
       throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Task with id '%s' was not found", id));
     }
-    return taskOptional.get();
+    return optional.get();
   }
 
   @Override
@@ -47,26 +46,37 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public Task edit(TaskDto taskDto) {
-    Task task = taskRepository.getById(taskDto.getId());
+  public Task edit(TaskDto dto) {
+    Task task = taskRepository.getById(dto.getId());
 
-    if (taskDto.getName() != null) {
-      task.setName(taskDto.getName());
+    if (dto.getName() != null) {
+      task.setName(dto.getName());
     }
-    if (taskDto.getNote() != null) {
-      task.setNote(taskDto.getNote());
+    if (dto.getNote() != null) {
+      task.setNote(dto.getNote());
     }
-    if (taskDto.getCompleted() != null) {
-      task.setCompleted(taskDto.getCompleted());
+    if (dto.getCompleted() != null) {
+      task.setCompleted(dto.getCompleted());
     }
-    if (taskDto.getImportant() != null) {
-      task.setImportant(taskDto.getImportant());
+    if (dto.getImportant() != null) {
+      task.setImportant(dto.getImportant());
     }
-    if (taskDto.getCompletionDate() != null) {
-      task.setCompletionDate(taskDto.getCompletionDate());
+    if (dto.getCompleteBeforeDate() != null) {
+      task.setCompleteBeforeDate(dto.getCompleteBeforeDate());
     }
 
     return update(task);
+  }
+
+  @Override
+  public void checkExistsTaskWithId(Long id) {
+    if (!existsTaskWithId(id))
+        throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Task with id '%s' was not found", id));
+  }
+
+  private boolean existsTaskWithId(Long id) {
+
+    return taskRepository.existsById(id);
   }
 
   @Override
@@ -81,4 +91,5 @@ public class TaskServiceImpl implements TaskService {
     task.getDesk().getTasks().remove(task);
     taskRepository.deleteById(id);
   }
+
 }

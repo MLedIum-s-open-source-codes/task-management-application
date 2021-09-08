@@ -7,13 +7,15 @@ import java.util.List;
 
 public interface SubtaskService {
 
-  Subtask create(SubtaskDto subtaskDto);
+  Subtask create(SubtaskDto dto);
 
   Subtask get(Long id);
 
   List<Subtask> getAllByTaskId(Long taskId);
 
-  Subtask edit(SubtaskDto subtaskDto);
+  Subtask edit(SubtaskDto dto);
+
+  void checkExistsSubtaskWithId(Long id);
 
   Subtask update(Subtask subtask);
 

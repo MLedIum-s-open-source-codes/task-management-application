@@ -23,7 +23,7 @@ public interface DeskUserRepository extends JpaRepository<DeskUser, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM desks_users WHERE desk_id = :deskId AND user_id = :userId", nativeQuery = true)
+    @Query(value = "DELETE d.*, t.* FROM desks_users d LEFT JOIN tasks_users t ON t.desk_user_id = d.id WHERE d.desk_id = :deskId AND d.user_id = :userId", nativeQuery = true)
     void deleteByDesk_IdAndUser_Id(@Param("deskId") Long deskId, @Param("userId") Long userId);
 
 }

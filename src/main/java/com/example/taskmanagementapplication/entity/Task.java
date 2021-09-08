@@ -27,7 +27,7 @@ public class Task {
 
   private Boolean important;
 
-  private Instant completionDate;
+  private Instant completeBeforeDate;
 
   @ManyToOne
   @JoinColumn(name = "desk_id",
@@ -43,13 +43,10 @@ public class Task {
   private Set<Subtask> subtasks = new HashSet<>();
 
   @Builder.Default
+  @OneToMany(mappedBy = "task",
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
   @EqualsAndHashCode.Exclude
-  @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
-  @JoinTable(name = "tasks_users",
-      joinColumns = @JoinColumn(name = "task_id",
-          referencedColumnName = "id"),
-      inverseJoinColumns = @JoinColumn(name = "user_id",
-          referencedColumnName = "id"))
-  private Set<User> users = new HashSet<>();
+  private Set<TaskUser> taskUsers = new HashSet<>();
 
 }

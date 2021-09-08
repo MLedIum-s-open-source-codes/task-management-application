@@ -1,8 +1,8 @@
 ### Как запустить:
 
-Выполните следующие команды, предварительно установив maven и docker:
+Выполните следующие команды, предварительно установив docker:
 \
-mvn clean package
+./mvnw clean package
 \
 docker build  -t tma:v1 .
 \
@@ -15,13 +15,16 @@ docker run --name TMA -p 8080:8080 tma:v1
 
 ### Стек Backend API
 
-Spring Boot
+Spring Boot,
 \
-Spring Data Rest,
+Spring Web,
 \
-Spring Data JPA, MySQL
+Spring Security, jwt
+\
+Spring Data JPA, MySQL, H2
 
-Lombok, Log4j2,
-\
-Swagger,
 LiquiBase
+\
+Lombok
+\
+Swagger

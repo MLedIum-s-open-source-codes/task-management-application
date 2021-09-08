@@ -15,4 +15,6 @@ public interface SubtaskRepository extends JpaRepository<Subtask, Long> {
 
   List<Subtask> getAllByTaskId(Long taskId);
 
+  boolean existsById(Long id);
+
 }

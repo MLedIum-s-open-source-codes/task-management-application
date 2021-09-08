@@ -50,27 +50,45 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User getByUsername(String username) {
-    Optional<User> user = userRepository.findByUsername(username);
-    if (user.isEmpty()) {
+    Optional<User> optional = userRepository.findByUsernameIgnoreCase(username);
+    if (optional.isEmpty()) {
       throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("User with username '%s' was not found", username));
     }
-    return user.get();
+    return optional.get();
   }
 
   @Override
-  public User edit(UserDto userDto) {
-    User user = get(userDto.getId());
-    if (userDto.getUsername() != null) {
-      user.setUsername(userDto.getUsername());
+  public User edit(UserDto dto) {
+    User user = get(dto.getId());
+    if (dto.getUsername() != null) {
+      user.setUsername(dto.getUsername());
     }
 
     return update(user);
   }
 
   @Override
+  public void checkExistsUserWithId(Long id) {
+    if (!existsUserWithId(id))
+        throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("User with id '%s' was not found", id));
+  }
+
+  @Override
+  public void checkExistsUserWithUsername(String username) {
+    if (!existsUserWithUsername(username))
+        throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("User with username '%s' was not found", username));
+  }
+
+  @Override
+  public boolean existsUserWithId(Long id) {
+
+    return userRepository.existsById(id);
+  }
+
+  @Override
   public boolean existsUserWithUsername(String username) {
 
-    return userRepository.existsByUsername(username);
+    return userRepository.existsByUsernameIgnoreCase(username);
   }
 
   @Override

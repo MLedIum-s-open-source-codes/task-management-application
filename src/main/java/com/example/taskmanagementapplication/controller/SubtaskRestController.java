@@ -26,13 +26,13 @@ public class SubtaskRestController {
   public ResponseEntity<SubtaskDto> createSubtask(
       @PathVariable Long deskId,
       @PathVariable Long taskId,
-      @RequestBody SubtaskDto subtaskDto,
+      @RequestBody SubtaskDto dto,
       @UserId Long userId) {
 
-    deskUserService.get(deskId, userId);
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
 
-    subtaskDto.setTaskId(taskId);
-    return ResponseEntity.ok(SubtaskDto.of(subtaskService.create(subtaskDto)));
+    dto.setTaskId(taskId);
+    return ResponseEntity.ok(SubtaskDto.of(subtaskService.create(dto)));
   }
 
   @GetMapping
@@ -41,7 +41,7 @@ public class SubtaskRestController {
       @PathVariable Long taskId,
       @UserId Long userId) {
 
-    deskUserService.get(deskId, userId);
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
 
     return ResponseEntity.ok(new SubtasksDto(subtaskService.getAllByTaskId(taskId)));
   }
@@ -53,7 +53,7 @@ public class SubtaskRestController {
       @PathVariable Long id,
       @UserId Long userId) {
 
-    deskUserService.get(deskId, userId);
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
 
     return ResponseEntity.ok(SubtaskDto.of(subtaskService.get(id)));
   }
@@ -63,14 +63,14 @@ public class SubtaskRestController {
       @PathVariable Long deskId,
       @PathVariable Long taskId,
       @PathVariable Long id,
-      @RequestBody SubtaskDto subtaskDto,
+      @RequestBody SubtaskDto dto,
       @UserId Long userId) {
 
-    deskUserService.get(deskId, userId);
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
 
-    subtaskDto.setId(id);
-    subtaskDto.setTaskId(taskId);
-    return ResponseEntity.ok(SubtaskDto.of(subtaskService.edit(subtaskDto)));
+    dto.setId(id);
+    dto.setTaskId(taskId);
+    return ResponseEntity.ok(SubtaskDto.of(subtaskService.edit(dto)));
   }
 
   @DeleteMapping("/{id}")
@@ -80,7 +80,7 @@ public class SubtaskRestController {
       @PathVariable Long id,
       @UserId Long userId) {
 
-    deskUserService.get(deskId, userId);
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
 
     subtaskService.delete(id);
     return ResponseEntity.ok().build();

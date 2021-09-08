@@ -27,11 +27,11 @@ public class DeskRestController {
 
   @PostMapping
   public ResponseEntity<DeskDto> createDesk(
-      @RequestBody DeskDto deskDto,
+      @RequestBody DeskDto dto,
       @UserId Long userId) {
 
     userService.get(userId);
-    Desk desk = deskService.create(deskDto);
+    Desk desk = deskService.create(dto);
     deskUserService.create(desk.getId(), userId, true);
     return ResponseEntity.ok(DeskDto.of(desk));
   }
@@ -50,19 +50,21 @@ public class DeskRestController {
       @PathVariable Long id,
       @UserId Long userId) {
 
-    return ResponseEntity.ok(DeskDto.of(deskUserService.get(id, userId).getDesk()));
+    deskUserService.checkContainsDeskWithIdUserWithId(id, userId);
+
+    return ResponseEntity.ok(DeskDto.of(deskService.get(id)));
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<DeskDto> editDesk(
       @PathVariable Long id,
-      @RequestBody DeskDto deskDto,
+      @RequestBody DeskDto dto,
       @UserId Long userId) {
 
-    deskUserService.get(id, userId);
+    deskUserService.checkContainsDeskWithIdUserWithId(id, userId);
 
-    deskDto.setId(id);
-    return ResponseEntity.ok(DeskDto.of(deskService.edit(deskDto)));
+    dto.setId(id);
+    return ResponseEntity.ok(DeskDto.of(deskService.edit(dto)));
   }
 
   @DeleteMapping("/{id}")
@@ -70,7 +72,7 @@ public class DeskRestController {
       @PathVariable Long id,
       @UserId Long userId) {
 
-    deskUserService.get(id, userId);
+    deskUserService.checkIsDeskOwner(id, userId);
 
     deskService.delete(id);
     return ResponseEntity.ok().build();

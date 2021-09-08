@@ -5,11 +5,13 @@ import com.example.taskmanagementapplication.entity.Desk;
 
 public interface DeskService {
 
-  Desk create(DeskDto deskDto);
+  Desk create(DeskDto dto);
 
   Desk get(Long id);
 
-  Desk edit(DeskDto deskDto);
+  Desk edit(DeskDto dto);
+
+  void checkExistsDeskWithId(Long id);
 
   Desk update(Desk desk);
 

@@ -33,27 +33,28 @@ public class User {
   @OneToMany(
       mappedBy = "user",
       fetch = FetchType.LAZY,
-      cascade = CascadeType.ALL,
+      cascade = CascadeType.REMOVE,
       orphanRemoval = true)
   @EqualsAndHashCode.Exclude
   private Set<DeskUser> userDesks = new HashSet<>();
 
-  @JsonIgnore
   @Builder.Default
-  @EqualsAndHashCode.Exclude
-  @ManyToMany(mappedBy = "users",
-      fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "user",
+      fetch = FetchType.LAZY,
+      cascade = CascadeType.REMOVE,
+      orphanRemoval = true)
   @Fetch(value = FetchMode.SUBSELECT)
-  private Set<Task> tasks = new HashSet<>();
+  @EqualsAndHashCode.Exclude
+  private Set<TaskUser> userTasks = new HashSet<>();
 
   @Builder.Default
-  @EqualsAndHashCode.Exclude
   @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
   @JoinTable(name = "users_roles",
       joinColumns = @JoinColumn(name = "user_id",
           referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "role_id",
           referencedColumnName = "id"))
+  @EqualsAndHashCode.Exclude
   private Set<Role> roles = new HashSet<>();
 
 

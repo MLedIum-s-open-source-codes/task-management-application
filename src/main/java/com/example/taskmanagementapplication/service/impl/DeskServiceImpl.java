@@ -22,29 +22,40 @@ public class DeskServiceImpl implements DeskService {
   private final DeskRepository deskRepository;
 
   @Override
-  public Desk create(DeskDto deskDto) {
-    deskDto.setId(null);
-    return update(deskDto.toDomain());
+  public Desk create(DeskDto dto) {
+    dto.setId(null);
+    return update(dto.toDomain());
   }
 
   @Override
   public Desk get(Long id) {
     Optional<Desk> desk = deskRepository.findById(id);
-    if (desk.isEmpty()) {
-      throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Desk with id '%s' was not found", id));
-    }
+    if (desk.isEmpty())
+        throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Desk with id '%s' was not found", id));
+
     return desk.get();
   }
 
   @Override
-  public Desk edit(DeskDto deskDto) {
-    Desk desk = get(deskDto.getId());
+  public Desk edit(DeskDto dto) {
+    Desk desk = get(dto.getId());
 
-    if (deskDto.getName() != null) {
-      desk.setName(deskDto.getName());
+    if (dto.getName() != null) {
+      desk.setName(dto.getName());
     }
 
     return update(desk);
+  }
+
+  @Override
+  public void checkExistsDeskWithId(Long id) {
+    if (!existsDeskWithId(id))
+        throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Desk with id '%s' was not found", id));
+  }
+
+  private boolean existsDeskWithId(Long id) {
+
+    return deskRepository.existsById(id);
   }
 
   @Override
@@ -58,4 +69,5 @@ public class DeskServiceImpl implements DeskService {
 
     deskRepository.deleteById(id);
   }
+
 }

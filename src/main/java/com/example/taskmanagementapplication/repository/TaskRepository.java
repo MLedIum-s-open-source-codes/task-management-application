@@ -15,4 +15,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
   List<Task> findAllByDeskId(Long deskId);
 
+  boolean existsById(Long id);
+
 }

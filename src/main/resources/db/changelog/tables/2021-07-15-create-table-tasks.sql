@@ -8,7 +8,7 @@ CREATE TABLE `tasks` (
     `note` VARCHAR(255) NULL,
     `completed` TINYINT NOT NULL DEFAULT 0,
     `important` TINYINT NOT NULL DEFAULT 0,
-    `completion_date` TIMESTAMP NULL,
+    `complete_before_date` TIMESTAMP NULL,
     PRIMARY KEY (`id`, `desk_id`),
     FOREIGN KEY (desk_id) REFERENCES desks (id));
 --rollback drop table tasks;

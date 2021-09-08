@@ -12,7 +12,13 @@ public interface UserService {
 
   User getByUsername(String username);
 
-  User edit(UserDto userDto);
+  User edit(UserDto dto);
+
+  void checkExistsUserWithId(Long id);
+
+  void checkExistsUserWithUsername(String username);
+
+  boolean existsUserWithId(Long id);
 
   boolean existsUserWithUsername(String username);
 

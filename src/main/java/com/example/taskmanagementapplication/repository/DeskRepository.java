@@ -11,4 +11,6 @@ public interface DeskRepository extends JpaRepository<Desk, Long> {
 
   Optional<Desk> findById(Long id);
 
+  boolean existsById(Long id);
+
 }

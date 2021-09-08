@@ -7,13 +7,15 @@ import java.util.List;
 
 public interface TaskService {
 
-  Task create(TaskDto taskDto);
+  Task create(TaskDto dto);
 
   Task get(Long id);
 
-  List<Task> getAllByDeskId(Long deskId);
+  List<Task> getAllByDeskId(Long id);
 
-  Task edit(TaskDto taskDto);
+  Task edit(TaskDto dto);
+
+  void checkExistsTaskWithId(Long id);
 
   Task update(Task task);
 

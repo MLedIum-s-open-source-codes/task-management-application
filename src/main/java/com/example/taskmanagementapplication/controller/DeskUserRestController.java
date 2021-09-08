@@ -30,9 +30,9 @@ public class DeskUserRestController {
       @PathVariable Long deskId,
       @RequestBody DeskUserRequest deskUserRequest,
       @UserId Long userId) {
-    if (!deskUserService.get(deskId, userId).getOwner()) {
-      throw new CustomException(ErrorTypeEnum.ACCESS_DENIED, format("User with id '%s' hasn't access to this action", userId));
-    }
+
+    deskUserService.checkIsDeskOwner(deskId, userId);
+
     return ResponseEntity.ok(UserDto.of(deskUserService.create(deskId, deskUserRequest.getUserId()).getUser()));
   }
 
@@ -41,7 +41,7 @@ public class DeskUserRestController {
       @PathVariable Long deskId,
       @UserId Long userId) {
 
-    deskUserService.get(deskId, userId);
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
 
     return ResponseEntity.ok(new UsersDto(
         deskUserService.getAllByDeskId(deskId).stream().map(
@@ -56,9 +56,7 @@ public class DeskUserRestController {
       @RequestBody DeskUserRequest deskUserRequest,
       @UserId Long userId) {
 
-    if (!deskUserService.get(deskId, userId).getOwner()) {
-      throw new CustomException(ErrorTypeEnum.ACCESS_DENIED, format("User with id '%s' hasn't access to this action", userId));
-    }
+    deskUserService.checkIsDeskOwner(deskId, userId);
 
     return ResponseEntity.ok(new UsersDto(
         deskUserService.changeOwner(deskId, deskUserRequest.getUserId(), userId).stream().map(
@@ -72,9 +70,10 @@ public class DeskUserRestController {
       @PathVariable Long deskId,
       @RequestBody DeskUserRequest deskUserRequest,
       @UserId Long userId) {
-    if (!deskUserService.get(deskId, userId).getOwner() && deskUserRequest.getUserId() != userId) {
-      throw new CustomException(ErrorTypeEnum.ACCESS_DENIED, format("User with id '%s' hasn't access to this action", userId));
-    }
+
+    if (deskUserRequest.getUserId() != userId && !deskUserService.get(deskId, userId).getOwner())
+        throw new CustomException(ErrorTypeEnum.ACCESS_DENIED, format("User with id '%s' hasn't access to this action", userId));
+
     deskUserService.delete(deskId, deskUserRequest.getUserId());
     return ResponseEntity.ok().build();
   }

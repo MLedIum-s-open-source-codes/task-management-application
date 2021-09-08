@@ -1,11 +1,10 @@
 package com.example.taskmanagementapplication.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -24,11 +23,18 @@ public class DeskUser {
             referencedColumnName = "id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "desk_id",
             referencedColumnName = "id")
     private Desk desk;
 
     private Boolean owner;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "deskUser",
+        fetch = FetchType.LAZY,
+        orphanRemoval = true)
+    @EqualsAndHashCode.Exclude
+    private Set<TaskUser> tasksUsers = new HashSet<>();
 
 }

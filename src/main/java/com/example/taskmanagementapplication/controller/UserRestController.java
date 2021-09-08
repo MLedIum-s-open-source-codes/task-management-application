@@ -17,9 +17,9 @@ public class UserRestController {
   private final UserService userService;
 
   @GetMapping
-  public ResponseEntity<UserDto> getUser(@UserId Long userId) {
+  public ResponseEntity<UserDto> getUser(@UserId Long id) {
 
-    return ResponseEntity.ok(UserDto.of(userService.get(userId)));
+    return ResponseEntity.ok(UserDto.of(userService.get(id)));
   }
 
   @GetMapping("/{id}")
@@ -29,10 +29,10 @@ public class UserRestController {
   }
 
   @PutMapping
-  public ResponseEntity<UserDto> editUser(@RequestBody UserDto userDto, @UserId Long userId) {
+  public ResponseEntity<UserDto> editUser(@RequestBody UserDto dto, @UserId Long userId) {
 
-    userDto.setId(userId);
-    return ResponseEntity.ok(UserDto.of(userService.edit(userDto)));
+    dto.setId(userId);
+    return ResponseEntity.ok(UserDto.of(userService.edit(dto)));
   }
 
 }

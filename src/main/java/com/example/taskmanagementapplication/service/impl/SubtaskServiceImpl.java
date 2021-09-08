@@ -23,21 +23,20 @@ public class SubtaskServiceImpl implements SubtaskService {
   private final SubtaskRepository subtaskRepository;
   private final TaskService taskService;
 
-
   @Override
-  public Subtask create(SubtaskDto subtaskDto) {
-    Task task = taskService.get(subtaskDto.getTaskId());
-    subtaskDto.setId(null);
-    return update(subtaskDto.toDomain(task));
+  public Subtask create(SubtaskDto dto) {
+    Task task = taskService.get(dto.getTaskId());
+    dto.setId(null);
+    return update(dto.toDomain(task));
   }
 
   @Override
   public Subtask get(Long id) {
-    Optional<Subtask> subtaskOptional = subtaskRepository.findById(id);
-    if (subtaskOptional.isEmpty()) {
+    Optional<Subtask> optional = subtaskRepository.findById(id);
+    if (optional.isEmpty()) {
       throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Subtask with id '%s' was not found", id));
     }
-    return subtaskOptional.get();
+    return optional.get();
   }
 
   @Override
@@ -47,17 +46,28 @@ public class SubtaskServiceImpl implements SubtaskService {
   }
 
   @Override
-  public Subtask edit(SubtaskDto subtaskDto) {
-    Subtask subtask = get(subtaskDto.getId());
+  public Subtask edit(SubtaskDto dto) {
+    Subtask subtask = get(dto.getId());
 
-    if (subtaskDto.getDescription() != null) {
-      subtask.setDescription(subtaskDto.getDescription());
+    if (dto.getDescription() != null) {
+      subtask.setDescription(dto.getDescription());
     }
-    if (subtaskDto.getCompleted() != null) {
-      subtask.setCompleted(subtaskDto.getCompleted());
+    if (dto.getCompleted() != null) {
+      subtask.setCompleted(dto.getCompleted());
     }
 
     return update(subtask);
+  }
+
+  @Override
+  public void checkExistsSubtaskWithId(Long id) {
+    if (!existsSubtaskWithId(id))
+        throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Subtask with id '%s' was not found", id));
+  }
+
+  private boolean existsSubtaskWithId(Long id) {
+
+    return subtaskRepository.existsById(id);
   }
 
   @Override
@@ -72,4 +82,5 @@ public class SubtaskServiceImpl implements SubtaskService {
     subtask.getTask().getSubtasks().remove(subtask);
     subtaskRepository.deleteById(id);
   }
+
 }

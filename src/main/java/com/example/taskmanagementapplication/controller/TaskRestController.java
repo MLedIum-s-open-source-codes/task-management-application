@@ -25,13 +25,13 @@ public class TaskRestController {
   @PostMapping
   public ResponseEntity<TaskDto> createTask(
       @PathVariable Long deskId,
-      @RequestBody TaskDto taskDto,
+      @RequestBody TaskDto dto,
       @UserId Long userId) {
 
-    deskUserService.get(deskId, userId);
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
 
-    taskDto.setDeskId(deskId);
-    return ResponseEntity.ok(TaskDto.of(taskService.create(taskDto)));
+    dto.setDeskId(deskId);
+    return ResponseEntity.ok(TaskDto.of(taskService.create(dto)));
   }
 
   @GetMapping
@@ -39,7 +39,7 @@ public class TaskRestController {
       @PathVariable Long deskId,
       @UserId Long userId) {
 
-    deskUserService.get(deskId, userId);
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
 
     return ResponseEntity.ok(new TasksDto(taskService.getAllByDeskId(deskId)));
   }
@@ -50,7 +50,7 @@ public class TaskRestController {
       @PathVariable Long id,
       @UserId Long userId) {
 
-    deskUserService.get(deskId, userId);
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
 
     return ResponseEntity.ok(TaskDto.of(taskService.get(id)));
   }
@@ -58,12 +58,12 @@ public class TaskRestController {
   @PutMapping("/{id}")
   public ResponseEntity<TaskDto> editTask(
       @PathVariable Long deskId,
-      @RequestBody TaskDto taskDto,
+      @RequestBody TaskDto dto,
       @UserId Long userId) {
 
-    deskUserService.get(deskId, userId);
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
 
-    return ResponseEntity.ok(TaskDto.of(taskService.edit(taskDto)));
+    return ResponseEntity.ok(TaskDto.of(taskService.edit(dto)));
   }
 
   @DeleteMapping("/{id}")
@@ -72,7 +72,7 @@ public class TaskRestController {
       @PathVariable Long id,
       @UserId Long userId) {
 
-    deskUserService.get(deskId, userId);
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
 
     taskService.delete(id);
     return ResponseEntity.ok().build();
