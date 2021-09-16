@@ -21,7 +21,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
       HttpServletRequest request,
       HttpServletResponse response,
       AccessDeniedException e)
-      throws IOException, ServletException {
+      throws IOException {
 
     response.setStatus(403);
 

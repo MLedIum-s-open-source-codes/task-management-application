@@ -94,6 +94,7 @@ public class JwtTokenProvider {
     checkSubjectToken(subject, token);
     checkValidityPeriod(token);
     checkContainsInTokenBlackList(token);
+    log.info("JWT token {} is valid", token);
   }
 
   private void checkSubjectToken(String subject, String token) {
@@ -108,7 +109,6 @@ public class JwtTokenProvider {
       log.info("JWT token {} is invalid", token);
       throw new JwtException("JWT token is invalid");
     }
-    log.info("JWT token {} is valid", token);
   }
 
   private void checkValidityPeriod(String token) {
@@ -139,7 +139,7 @@ public class JwtTokenProvider {
 
   public void addToBlackList(HttpServletRequest request) {
     String token = getToken(request);
-    validateToken(null, token);
+    validateToken(TokenSubjectEnum.AUTH.name(), token);
     Date expirationDate = Jwts.parser().setSigningKey(jwtTokenProperties.getSecretKey()
         .getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody().getExpiration();
     tokenBlackList.put(token, expirationDate);

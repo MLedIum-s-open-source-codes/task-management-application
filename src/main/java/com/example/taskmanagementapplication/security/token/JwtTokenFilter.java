@@ -40,7 +40,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
   private void doTokenFilter(HttpServletRequest request) {
     String token = jwtTokenProvider.getToken(request);
     if (token != null) {
-      jwtTokenProvider.validateToken(TokenSubjectEnum.AUTH.name(), token);
+      //jwtTokenProvider.validateToken(TokenSubjectEnum.AUTH.name(), token);
       UsernamePasswordAuthenticationToken authentication
           = jwtTokenProvider.getAuthentication(token);
       authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

@@ -41,7 +41,12 @@ public class DeskRestController {
 
     return ResponseEntity.ok(new DesksDto(
         deskUserService.getAllByUserId(userId).stream().map(
-            deskUser -> deskUser.getDesk()
+            deskUser -> {
+              Desk desk = deskUser.getDesk();
+              desk.setDeskUsers(null);
+              desk.setTasks(null);
+              return desk;
+            }
         ).collect(Collectors.toList())));
   }
 

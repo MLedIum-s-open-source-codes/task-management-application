@@ -1,6 +1,6 @@
-### Как запустить:
+### How to launch:
 
-Выполните следующие команды, предварительно установив docker:
+Run the following commands after installing docker:
 \
 ./mvnw clean package
 \
@@ -10,10 +10,10 @@ docker run --name TMA -p 8080:8080 tma:v1
 
 
 <!--
-После умпешного выполнения команд, перейдите по ссылке: http://localhost:8080/
+After successful execution of the commands, follow the link: http://localhost:8080/
 -->
 
-### Стек Backend API
+### Stack Backend API
 
 Spring Boot,
 \

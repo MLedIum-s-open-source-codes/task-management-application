@@ -4,11 +4,11 @@ import com.example.taskmanagementapplication.domain.request.AuthenticationReques
 import com.example.taskmanagementapplication.domain.response.AuthenticationResponse;
 import com.example.taskmanagementapplication.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/auth")
@@ -27,6 +27,12 @@ public class AuthenticationRestController {
   public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest authenticationRequest) {
 
     return ResponseEntity.ok(authenticationService.register(authenticationRequest));
+  }
+
+  @DeleteMapping("/logout")
+  public ResponseEntity<HttpStatus> logout(HttpServletRequest request) {
+    authenticationService.logout(request);
+    return ResponseEntity.ok().build();
   }
 
 }

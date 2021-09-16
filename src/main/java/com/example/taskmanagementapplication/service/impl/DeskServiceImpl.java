@@ -29,11 +29,11 @@ public class DeskServiceImpl implements DeskService {
 
   @Override
   public Desk get(Long id) {
-    Optional<Desk> desk = deskRepository.findById(id);
-    if (desk.isEmpty())
+    Optional<Desk> optional = deskRepository.findById(id);
+    if (optional.isEmpty())
         throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Desk with id '%s' was not found", id));
 
-    return desk.get();
+    return optional.get();
   }
 
   @Override

@@ -28,7 +28,7 @@ public class DeskDto {
         .id(desk.getId())
         .name(desk.getName())
         .tasks(desk.getTasks() == null ? null : desk.getTasks().stream().map(TaskDto::of).collect(Collectors.toList()))
-        .users(desk.getDeskUsers().stream().map(
+        .users(desk.getDeskUsers() == null ? null : desk.getDeskUsers().stream().map(
             deskUser -> UserDto.of(deskUser.getUser())
         ).collect(Collectors.toList()))
         .build();
