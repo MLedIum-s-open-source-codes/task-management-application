@@ -14,6 +14,8 @@ public class DesksDto {
   private List<DeskDto> desks;
 
   public DesksDto(List<Desk> desks) {
+
     this.desks = desks == null ? null : desks.stream().map(DeskDto::of).collect(Collectors.toList());
   }
+
 }

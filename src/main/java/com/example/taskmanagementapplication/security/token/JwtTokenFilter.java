@@ -27,8 +27,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       HttpServletRequest request,
       HttpServletResponse response,
-      FilterChain chain)
-      throws ServletException, IOException {
+      FilterChain chain
+  ) throws ServletException, IOException {
     try {
       doTokenFilter(request);
     } catch (JwtException e) {
@@ -40,7 +40,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
   private void doTokenFilter(HttpServletRequest request) {
     String token = jwtTokenProvider.getToken(request);
     if (token != null) {
-      //jwtTokenProvider.validateToken(TokenSubjectEnum.AUTH.name(), token);
       UsernamePasswordAuthenticationToken authentication
           = jwtTokenProvider.getAuthentication(token);
       authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

@@ -28,7 +28,8 @@ public class DeskRestController {
   @PostMapping
   public ResponseEntity<DeskDto> createDesk(
       @RequestBody DeskDto dto,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
     userService.get(userId);
     Desk desk = deskService.create(dto);
@@ -53,9 +54,10 @@ public class DeskRestController {
   @GetMapping("/{id}")
   public ResponseEntity<DeskDto> getDesk(
       @PathVariable Long id,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
-    deskUserService.checkContainsDeskWithIdUserWithId(id, userId);
+    checkAccess(id, userId);
 
     return ResponseEntity.ok(DeskDto.of(deskService.get(id)));
   }
@@ -64,9 +66,10 @@ public class DeskRestController {
   public ResponseEntity<DeskDto> editDesk(
       @PathVariable Long id,
       @RequestBody DeskDto dto,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
-    deskUserService.checkContainsDeskWithIdUserWithId(id, userId);
+    checkAccess(id, userId);
 
     dto.setId(id);
     return ResponseEntity.ok(DeskDto.of(deskService.edit(dto)));
@@ -75,12 +78,18 @@ public class DeskRestController {
   @DeleteMapping("/{id}")
   public ResponseEntity<HttpStatus> deleteDesk(
       @PathVariable Long id,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
     deskUserService.checkIsDeskOwner(id, userId);
 
     deskService.delete(id);
     return ResponseEntity.ok().build();
+  }
+
+  private void checkAccess(Long deskId, Long userId) {
+
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
   }
 
 }

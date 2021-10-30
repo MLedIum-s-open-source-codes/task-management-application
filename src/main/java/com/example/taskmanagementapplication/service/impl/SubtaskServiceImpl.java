@@ -33,10 +33,14 @@ public class SubtaskServiceImpl implements SubtaskService {
   @Override
   public Subtask get(Long id) {
     Optional<Subtask> optional = subtaskRepository.findById(id);
-    if (optional.isEmpty()) {
-      throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Subtask with id '%s' was not found", id));
-    }
-    return optional.get();
+    if (optional.isPresent())
+        return optional.get();
+
+
+    throw new CustomException(
+        ErrorTypeEnum.NOT_FOUND,
+        format("Subtask with id '%s' was not found", id)
+    );
   }
 
   @Override
@@ -61,8 +65,12 @@ public class SubtaskServiceImpl implements SubtaskService {
 
   @Override
   public void checkExistsSubtaskWithId(Long id) {
-    if (!existsSubtaskWithId(id))
-        throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Subtask with id '%s' was not found", id));
+    if (!existsSubtaskWithId(id)) {
+      throw new CustomException(
+          ErrorTypeEnum.NOT_FOUND,
+          format("Subtask with id '%s' was not found", id)
+      );
+    }
   }
 
   private boolean existsSubtaskWithId(Long id) {

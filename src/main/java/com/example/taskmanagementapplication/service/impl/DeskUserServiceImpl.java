@@ -2,14 +2,12 @@ package com.example.taskmanagementapplication.service.impl;
 
 import com.example.taskmanagementapplication.entity.Desk;
 import com.example.taskmanagementapplication.entity.DeskUser;
-import com.example.taskmanagementapplication.entity.Task;
 import com.example.taskmanagementapplication.entity.User;
 import com.example.taskmanagementapplication.enumeration.ErrorTypeEnum;
 import com.example.taskmanagementapplication.exception.CustomException;
 import com.example.taskmanagementapplication.repository.DeskUserRepository;
 import com.example.taskmanagementapplication.service.DeskService;
 import com.example.taskmanagementapplication.service.DeskUserService;
-import com.example.taskmanagementapplication.service.TaskUserService;
 import com.example.taskmanagementapplication.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -44,7 +42,7 @@ public class DeskUserServiceImpl implements DeskUserService {
     DeskUser deskUser = DeskUser.builder()
         .desk(desk)
         .user(user)
-        .owner(isOwner)
+        .isOwner(isOwner)
         .build();
     return update(deskUser);
   }
@@ -75,10 +73,10 @@ public class DeskUserServiceImpl implements DeskUserService {
   @Override
   public List<DeskUser> changeOwner(Long deskId, Long newOwnerId, Long oldOwnerId) {
     DeskUser oldOnwer = get(deskId, oldOwnerId);
-    oldOnwer.setOwner(false);
+    oldOnwer.setIsOwner(false);
 
     DeskUser newOwner = get(deskId, newOwnerId);
-    newOwner.setOwner(true);
+    newOwner.setIsOwner(true);
 
     deskUserRepository.saveAll(Arrays.asList(newOwner, oldOnwer));
 
@@ -88,13 +86,19 @@ public class DeskUserServiceImpl implements DeskUserService {
   @Override
   public void checkContainsDeskWithIdUserWithId(Long deskId, Long userId) {
     if (!containsDeskWithIdUserWithId(deskId, userId))
-        throw new CustomException(ErrorTypeEnum.ACCESS_DENIED, format("User with id '%s' hasn't access to desk with id '%s'", userId, deskId));
+        throw new CustomException(
+            ErrorTypeEnum.ACCESS_DENIED,
+            format("User with id '%s' hasn't access to desk with id '%s'", userId, deskId)
+        );
   }
 
   @Override
   public void checkIsDeskOwner(Long deskId, Long userId) {
     if (!isDeskOwner(deskId, userId))
-        throw new CustomException(ErrorTypeEnum.ACCESS_DENIED, format("User with id '%s' hasn't access to this action", userId));
+        throw new CustomException(
+            ErrorTypeEnum.ACCESS_DENIED,
+            format("User with id '%s' hasn't access to this action", userId)
+        );
   }
 
   private boolean containsDeskWithIdUserWithId(Long deskId, Long userId) {
@@ -104,7 +108,7 @@ public class DeskUserServiceImpl implements DeskUserService {
 
   private boolean isDeskOwner(Long deskId, Long userId) {
 
-    return get(deskId, userId).getOwner();
+    return get(deskId, userId).getIsOwner();
   }
 
   @Override

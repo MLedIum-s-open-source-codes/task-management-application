@@ -26,7 +26,10 @@ public class UserServiceImpl implements UserService {
   @Override
   public User create(AuthenticationRequest authenticationRequest) {
     if (existsUserWithUsername(authenticationRequest.getUsername())) {
-      throw new RuntimeException(format("User with username '%s' already exists", authenticationRequest.getUsername()));
+      throw new CustomException(
+          ErrorTypeEnum.ALREADY_EXIST,
+          format("User with username '%s' already exists", authenticationRequest.getUsername())
+      );
     }
     User user = User.builder()
         .username(authenticationRequest.getUsername())
@@ -41,20 +44,26 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User get(Long id) {
-    Optional<User> user = userRepository.findById(id);
-    if (user.isEmpty()) {
-      throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("User with id '%s' was not found", id));
-    }
-    return user.get();
+    Optional<User> optional = userRepository.findById(id);
+    if (optional.isPresent())
+        return optional.get();
+
+    throw new CustomException(
+        ErrorTypeEnum.NOT_FOUND,
+        format("User with id '%s' was not found", id)
+    );
   }
 
   @Override
   public User getByUsername(String username) {
     Optional<User> optional = userRepository.findByUsernameIgnoreCase(username);
-    if (optional.isEmpty()) {
-      throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("User with username '%s' was not found", username));
-    }
-    return optional.get();
+    if (optional.isPresent())
+        return optional.get();
+
+    throw new CustomException(
+        ErrorTypeEnum.NOT_FOUND,
+        format("User with username '%s' was not found", username)
+    );
   }
 
   @Override
@@ -69,14 +78,22 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void checkExistsUserWithId(Long id) {
-    if (!existsUserWithId(id))
-        throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("User with id '%s' was not found", id));
+    if (existsUserWithId(id)) return;
+
+    throw new CustomException(
+        ErrorTypeEnum.NOT_FOUND,
+        format("User with id '%s' was not found", id)
+    );
   }
 
   @Override
   public void checkExistsUserWithUsername(String username) {
-    if (!existsUserWithUsername(username))
-        throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("User with username '%s' was not found", username));
+    if (existsUserWithUsername(username)) return;
+
+    throw new CustomException(
+        ErrorTypeEnum.NOT_FOUND,
+        format("User with username '%s' was not found", username)
+    );
   }
 
   @Override

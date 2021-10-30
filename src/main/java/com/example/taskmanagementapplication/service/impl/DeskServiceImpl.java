@@ -30,10 +30,13 @@ public class DeskServiceImpl implements DeskService {
   @Override
   public Desk get(Long id) {
     Optional<Desk> optional = deskRepository.findById(id);
-    if (optional.isEmpty())
-        throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Desk with id '%s' was not found", id));
+    if (optional.isPresent())
+        return optional.get();
 
-    return optional.get();
+    throw new CustomException(
+        ErrorTypeEnum.NOT_FOUND,
+        format("Desk with id '%s' was not found", id)
+    );
   }
 
   @Override
@@ -49,8 +52,12 @@ public class DeskServiceImpl implements DeskService {
 
   @Override
   public void checkExistsDeskWithId(Long id) {
-    if (!existsDeskWithId(id))
-        throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("Desk with id '%s' was not found", id));
+    if (!existsDeskWithId(id)) {
+      throw new CustomException(
+          ErrorTypeEnum.NOT_FOUND,
+          format("Desk with id '%s' was not found", id)
+      );
+    }
   }
 
   private boolean existsDeskWithId(Long id) {

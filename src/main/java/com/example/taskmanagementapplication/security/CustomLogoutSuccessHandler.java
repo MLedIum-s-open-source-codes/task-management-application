@@ -23,8 +23,8 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
   public void onLogoutSuccess(
       final HttpServletRequest request,
       final HttpServletResponse response,
-      final Authentication authentication)
-      throws IOException, ServletException {
+      final Authentication authentication
+  ) throws IOException, ServletException {
 
     final String refererUrl = request.getHeader("Referer");
     log.debug("CustomLogoutSuccessHandler.onLogoutSuccess refererUrl : " + refererUrl);

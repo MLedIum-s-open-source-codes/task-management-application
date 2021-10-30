@@ -4,6 +4,7 @@ import com.example.taskmanagementapplication.annotation.UserId;
 import com.example.taskmanagementapplication.domain.dto.UserDto;
 import com.example.taskmanagementapplication.domain.dto.UsersDto;
 import com.example.taskmanagementapplication.domain.request.DeskUserRequest;
+import com.example.taskmanagementapplication.entity.DeskUser;
 import com.example.taskmanagementapplication.enumeration.ErrorTypeEnum;
 import com.example.taskmanagementapplication.exception.CustomException;
 import com.example.taskmanagementapplication.service.DeskUserService;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -29,7 +31,8 @@ public class DeskUserRestController {
   public ResponseEntity<UserDto> addUser(
       @PathVariable Long deskId,
       @RequestBody DeskUserRequest deskUserRequest,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
     deskUserService.checkIsDeskOwner(deskId, userId);
 
@@ -39,14 +42,14 @@ public class DeskUserRestController {
   @GetMapping
   public ResponseEntity<UsersDto> getUsers(
       @PathVariable Long deskId,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
     deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
 
     return ResponseEntity.ok(new UsersDto(
-        deskUserService.getAllByDeskId(deskId).stream().map(
-            deskUser -> deskUser.getUser()
-        ).collect(Collectors.toList())
+        deskUserService.getAllByDeskId(deskId)
+                       .stream().map(DeskUser::getUser).collect(Collectors.toList())
     ));
   }
 
@@ -54,14 +57,14 @@ public class DeskUserRestController {
   public ResponseEntity<UsersDto> changeOwner(
       @PathVariable Long deskId,
       @RequestBody DeskUserRequest deskUserRequest,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
     deskUserService.checkIsDeskOwner(deskId, userId);
 
     return ResponseEntity.ok(new UsersDto(
-        deskUserService.changeOwner(deskId, deskUserRequest.getUserId(), userId).stream().map(
-            deskUser -> deskUser.getUser()
-        ).collect(Collectors.toList())
+        deskUserService.changeOwner(deskId, deskUserRequest.getUserId(), userId)
+                       .stream().map(DeskUser::getUser).collect(Collectors.toList())
     ));
   }
 
@@ -69,10 +72,17 @@ public class DeskUserRestController {
   public ResponseEntity<HttpStatus> removeUser(
       @PathVariable Long deskId,
       @RequestBody DeskUserRequest deskUserRequest,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
-    if (deskUserRequest.getUserId() != userId && !deskUserService.get(deskId, userId).getOwner())
-        throw new CustomException(ErrorTypeEnum.ACCESS_DENIED, format("User with id '%s' hasn't access to this action", userId));
+    if (!Objects.equals(deskUserRequest.getUserId(), userId)
+        && !deskUserService.get(deskId, userId).getIsOwner()) {
+
+      throw new CustomException(
+          ErrorTypeEnum.ACCESS_DENIED,
+          format("User with id '%s' hasn't access to this action", userId)
+      );
+    }
 
     deskUserService.delete(deskId, deskUserRequest.getUserId());
     return ResponseEntity.ok().build();

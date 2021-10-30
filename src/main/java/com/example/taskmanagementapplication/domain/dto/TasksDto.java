@@ -16,4 +16,5 @@ public class TasksDto {
   public TasksDto(List<Task> tasks) {
     this.tasks = tasks == null ? null : tasks.stream().map(TaskDto::of).collect(Collectors.toList());
   }
+
 }

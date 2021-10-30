@@ -58,8 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .authenticationEntryPoint(restAuthenticationEntryPoint)
           .and()
         .authorizeRequests()
-        .antMatchers("/ping", "/auth/**", "/error", "/favicon.ico").permitAll()
-        .antMatchers("/swagger-resources/**", "/swagger-ui.html").permitAll()
+        .antMatchers("/auth/**").permitAll()
         .anyRequest().authenticated()
           .and()
         .logout()
@@ -74,8 +73,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     super.configure(web);
-    web.ignoring().antMatchers("/webjars/**", "/v2/api-docs/**",
-        "/swagger-resources/**", "/swagger-ui.html/**");
   }
 
   @Override

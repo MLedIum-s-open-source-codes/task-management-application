@@ -27,9 +27,10 @@ public class SubtaskRestController {
       @PathVariable Long deskId,
       @PathVariable Long taskId,
       @RequestBody SubtaskDto dto,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
-    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
+    checkAccess(deskId, userId);
 
     dto.setTaskId(taskId);
     return ResponseEntity.ok(SubtaskDto.of(subtaskService.create(dto)));
@@ -39,9 +40,10 @@ public class SubtaskRestController {
   public ResponseEntity<SubtasksDto> getSubtasksByTaskId(
       @PathVariable Long deskId,
       @PathVariable Long taskId,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
-    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
+    checkAccess(deskId, userId);
 
     return ResponseEntity.ok(new SubtasksDto(subtaskService.getAllByTaskId(taskId)));
   }
@@ -51,9 +53,10 @@ public class SubtaskRestController {
       @PathVariable Long deskId,
       @PathVariable Long taskId,
       @PathVariable Long id,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
-    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
+    checkAccess(deskId, userId);
 
     return ResponseEntity.ok(SubtaskDto.of(subtaskService.get(id)));
   }
@@ -64,9 +67,10 @@ public class SubtaskRestController {
       @PathVariable Long taskId,
       @PathVariable Long id,
       @RequestBody SubtaskDto dto,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
-    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
+    checkAccess(deskId, userId);
 
     dto.setId(id);
     dto.setTaskId(taskId);
@@ -78,12 +82,18 @@ public class SubtaskRestController {
       @PathVariable Long deskId,
       @PathVariable Long taskId,
       @PathVariable Long id,
-      @UserId Long userId) {
+      @UserId Long userId
+  ) {
 
-    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
+    checkAccess(deskId, userId);
 
     subtaskService.delete(id);
     return ResponseEntity.ok().build();
+  }
+
+  private void checkAccess(Long deskId, Long userId) {
+
+    deskUserService.checkContainsDeskWithIdUserWithId(deskId, userId);
   }
 
 }

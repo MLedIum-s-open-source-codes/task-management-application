@@ -16,4 +16,5 @@ public class SubtasksDto {
   public SubtasksDto(List<Subtask> subtasks) {
     this.subtasks = subtasks == null ? null : subtasks.stream().map(SubtaskDto::of).collect(Collectors.toList());
   }
+
 }

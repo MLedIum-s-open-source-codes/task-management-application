@@ -16,8 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(CustomException.class)
-  protected ResponseEntity<ResponseError> customException(CustomException exception,
-                                                          HttpServletRequest request) {
+  protected ResponseEntity<ResponseError> customException(
+      CustomException exception,
+      HttpServletRequest request
+  ) {
     log.info(exception.toString());
     log.error("Fail: {}", exception.getMessage(), exception);
     return ResponseEntity

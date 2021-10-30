@@ -22,13 +22,15 @@ public class RoleServiceImpl implements RoleService {
   @Override
   public Role getRole(Long roleId) {
     Optional<Role> role = roleRepository.findById(roleId);
-    if (role.isPresent()) {
-      return role.get();
-    }
-    log.error("Role with id '{}' not found", roleId);
+    if (role.isPresent())
+        return role.get();
+
+
+    log.error("Role with id '{}' was not found", roleId);
     throw new CustomException(
         ErrorTypeEnum.NOT_FOUND,
-        String.format("Role with id '%s' not found", roleId));
+        String.format("Role with id '%s' was not found", roleId)
+    );
   }
 
   @Override
@@ -37,10 +39,11 @@ public class RoleServiceImpl implements RoleService {
     if (role.isPresent()) {
       return role.get();
     }
-    log.error("Role with name '{}' not found", name);
+    log.error("Role with name '{}' was not found", name);
     throw new CustomException(
         ErrorTypeEnum.NOT_FOUND,
-        String.format("Role with name '%s' not found", name));
+        String.format("Role with name '%s' was not found", name)
+    );
   }
 
   @Override

@@ -28,7 +28,7 @@ public class DeskUser {
             referencedColumnName = "id")
     private Desk desk;
 
-    private Boolean owner;
+    private Boolean isOwner;
 
     @Builder.Default
     @OneToMany(mappedBy = "deskUser",

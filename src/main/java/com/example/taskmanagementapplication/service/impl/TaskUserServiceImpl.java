@@ -33,7 +33,10 @@ public class TaskUserServiceImpl implements TaskUserService {
     Task task = taskService.get(taskId);
     User user = userService.get(userId);
     if (taskUserRepository.existsByTask_IdAndUser_Id(taskId, userId)) {
-      throw new CustomException(ErrorTypeEnum.ALREADY_EXIST, format("User with id '%s' has already been assigned to the task with id '%s'", userId, taskId));
+      throw new CustomException(
+          ErrorTypeEnum.ALREADY_EXIST,
+          format("User with id '%s' has already been assigned to the task with id '%s'", userId, taskId)
+      );
     }
     DeskUser deskUser = deskUserService.get(task.getDesk().getId(), userId);
     TaskUser taskUser = TaskUser.builder()
@@ -49,8 +52,12 @@ public class TaskUserServiceImpl implements TaskUserService {
     taskService.checkExistsTaskWithId(taskId);
     userService.checkExistsUserWithId(userId);
     Optional<TaskUser> optional = taskUserRepository.findByTask_IdAndUser_Id(taskId, userId);
-    if (optional.isEmpty())
-      throw new CustomException(ErrorTypeEnum.NOT_FOUND, format("There is no user with id '%s' assigned to a task with id '%s'", userId, taskId));
+    if (optional.isEmpty()) {
+      throw new CustomException(
+          ErrorTypeEnum.NOT_FOUND,
+          format("There is no user with id '%s' assigned to a task with id '%s'", userId, taskId)
+      );
+    }
 
     return optional.get();
   }
