@@ -49,7 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     if (userService.existsUserWithUsername(authenticationRequest.getUsername())) {
       throw new CustomException(
           ErrorTypeEnum.ALREADY_EXIST,
-          format("User with username '%s' already exist")
+          format("User with username '%s' already exist", authenticationRequest.getUsername())
       );
     }
     authenticationRequest.setPassword(passwordEncoder.encode(authenticationRequest.getPassword()));

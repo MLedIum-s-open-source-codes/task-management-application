@@ -1,5 +1,6 @@
 package com.example.taskmanagementapplication.entity;
 
+import com.example.taskmanagementapplication.entity.audit.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "subtasks")
-public class Subtask {
+public class Subtask extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +28,8 @@ public class Subtask {
   @JoinColumn(name = "task_id",
       referencedColumnName = "id")
   private Task task;
+
+  @Builder.Default
+  private Boolean isActive = true;
+
 }

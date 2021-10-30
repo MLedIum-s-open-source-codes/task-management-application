@@ -1,5 +1,6 @@
 package com.example.taskmanagementapplication.entity;
 
+import com.example.taskmanagementapplication.entity.audit.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "desks")
-public class Desk {
+public class Desk extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,5 +36,8 @@ public class Desk {
       orphanRemoval = true)
   @EqualsAndHashCode.Exclude
   private Set<Task> tasks = new HashSet<>();
+
+  @Builder.Default
+  private Boolean isActive = true;
 
 }

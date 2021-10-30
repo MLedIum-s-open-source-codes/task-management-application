@@ -1,5 +1,6 @@
 package com.example.taskmanagementapplication.entity;
 
+import com.example.taskmanagementapplication.entity.audit.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tasks")
-public class Task {
+public class Task extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,9 @@ public class Task {
   @JoinColumn(name = "desk_id",
       referencedColumnName = "id")
   private Desk desk;
+
+  @Builder.Default
+  private Boolean isActive = true;
 
   @Builder.Default
   @OneToMany(mappedBy = "task",

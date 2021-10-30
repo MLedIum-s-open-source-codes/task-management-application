@@ -1,7 +1,7 @@
 package com.example.taskmanagementapplication.entity;
 
+import com.example.taskmanagementapplication.entity.audit.BaseEntity;
 import com.example.taskmanagementapplication.enumeration.RoleEnum;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class User {
+public class User extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class User {
   private String password;
 
   @Builder.Default
-  private boolean enabled = false;
+  private Boolean isActive = true;
 
   @Builder.Default
   @OneToMany(

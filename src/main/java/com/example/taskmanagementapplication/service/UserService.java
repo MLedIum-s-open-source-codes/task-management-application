@@ -4,6 +4,8 @@ import com.example.taskmanagementapplication.domain.dto.UserDto;
 import com.example.taskmanagementapplication.domain.request.AuthenticationRequest;
 import com.example.taskmanagementapplication.entity.User;
 
+import java.util.Optional;
+
 public interface UserService {
 
   User create(AuthenticationRequest authenticationRequest);
@@ -11,6 +13,8 @@ public interface UserService {
   User get(Long id);
 
   User getByUsername(String username);
+
+  Optional<User> getCurrentUser();
 
   User edit(UserDto dto);
 

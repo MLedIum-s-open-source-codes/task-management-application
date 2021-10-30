@@ -12,8 +12,7 @@ public class JwtTokenProperties {
   private String issuer;
   private String secretKey;
 
-  private long expiredTimeSecAuthToken;
-  private long expiredTimeSecOtherToken;
+  private long tokenExpiredTimeSec;
   private long timeoutSec;
 
 }

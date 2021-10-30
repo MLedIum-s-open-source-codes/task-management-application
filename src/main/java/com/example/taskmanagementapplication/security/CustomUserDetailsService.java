@@ -1,6 +1,8 @@
 package com.example.taskmanagementapplication.security;
 
 import com.example.taskmanagementapplication.entity.User;
+import com.example.taskmanagementapplication.enumeration.ErrorTypeEnum;
+import com.example.taskmanagementapplication.exception.CustomException;
 import com.example.taskmanagementapplication.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 @Log4j2
 @Service("userDetailsService")
 @RequiredArgsConstructor
@@ -24,6 +28,12 @@ public class CustomUserDetailsService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userService.getByUsername(username);
+    if (!user.getIsActive()) {
+      throw new CustomException(
+          ErrorTypeEnum.ACCESS_DENIED,
+          format("User with username '%s' is not active", username)
+      );
+    }
     log.info("User '{}' authorize successfully", user.getUsername());
 
     List<GrantedAuthority> grantedAuthorities = user.getRoles().stream()
@@ -35,7 +45,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         .id(user.getId())
         .username(user.getUsername())
         .password(user.getPassword())
-        .enabled(user.isEnabled())
+        .enabled(user.getIsActive())
         .authorities(grantedAuthorities)
         .build();
   }

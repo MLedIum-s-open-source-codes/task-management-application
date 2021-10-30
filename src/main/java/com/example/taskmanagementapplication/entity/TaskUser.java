@@ -1,5 +1,6 @@
 package com.example.taskmanagementapplication.entity;
 
+import com.example.taskmanagementapplication.entity.audit.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tasks_users")
-public class TaskUser {
+public class TaskUser extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +31,8 @@ public class TaskUser {
   @ManyToOne
   @JoinColumn(name = "desk_user_id")
   private DeskUser deskUser;
+
+  @Builder.Default
+  private Boolean isActive = true;
 
 }

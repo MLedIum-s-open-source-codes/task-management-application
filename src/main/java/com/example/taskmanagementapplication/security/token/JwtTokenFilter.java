@@ -1,6 +1,5 @@
 package com.example.taskmanagementapplication.security.token;
 
-import com.example.taskmanagementapplication.enumeration.TokenSubjectEnum;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

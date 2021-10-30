@@ -7,10 +7,15 @@ import com.example.taskmanagementapplication.enumeration.ErrorTypeEnum;
 import com.example.taskmanagementapplication.enumeration.RoleEnum;
 import com.example.taskmanagementapplication.exception.CustomException;
 import com.example.taskmanagementapplication.repository.UserRepository;
+import com.example.taskmanagementapplication.security.UserDetailsImpl;
 import com.example.taskmanagementapplication.service.RoleService;
 import com.example.taskmanagementapplication.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -34,7 +39,6 @@ public class UserServiceImpl implements UserService {
     User user = User.builder()
         .username(authenticationRequest.getUsername())
         .password(authenticationRequest.getPassword())
-        .enabled(true)
         .build();
 
     user.addRole(roleService.getRole(RoleEnum.USER.getName()));
@@ -64,6 +68,22 @@ public class UserServiceImpl implements UserService {
         ErrorTypeEnum.NOT_FOUND,
         format("User with username '%s' was not found", username)
     );
+  }
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  @Override
+  public Optional<User> getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+      return Optional.empty();
+    }
+    String username;
+    if (authentication.getPrincipal() instanceof UserDetailsImpl) {
+      username = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
+    } else {
+      username = authentication.getName();
+    }
+    return userRepository.findByUsernameIgnoreCase(username);
   }
 
   @Override

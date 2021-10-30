@@ -1,7 +1,6 @@
 package com.example.taskmanagementapplication.security.token;
 
 import com.example.taskmanagementapplication.config.properties.JwtTokenProperties;
-import com.example.taskmanagementapplication.enumeration.TokenSubjectEnum;
 import com.example.taskmanagementapplication.security.CustomUserDetailsService;
 import com.nimbusds.oauth2.sdk.token.AccessTokenType;
 import io.jsonwebtoken.JwtException;
@@ -49,30 +48,21 @@ public class JwtTokenProvider {
   }
 
   public String createToken(String username) {
-
-    return createToken(TokenSubjectEnum.AUTH.name(), username);
-  }
-
-  public String createToken(String subject, String username) {
-    long expirationTime = jwtTokenProperties.getExpiredTimeSecOtherToken();
-    if (subject.equals(TokenSubjectEnum.AUTH.name())) {
-      expirationTime = jwtTokenProperties.getExpiredTimeSecAuthToken();
-    }
+    long expirationTime = jwtTokenProperties.getTokenExpiredTimeSec();
     String token = Jwts.builder()
         .setId(username)
-        .setSubject(subject)
         .setExpiration(Date.from(Instant.now().plusSeconds(expirationTime)))
         .setIssuer(jwtTokenProperties.getIssuer())
         .setIssuedAt(Date.from(Instant.now()))
         .signWith(SignatureAlgorithm.HS256,
             jwtTokenProperties.getSecretKey().getBytes(StandardCharsets.UTF_8))
         .compact();
-    log.info("Token {} '{}' created for user '{}'", subject, token, username);
+    log.info("Token '{}' created for user '{}'", token, username);
     return token;
   }
 
   public UsernamePasswordAuthenticationToken getAuthentication(String token) {
-    validateToken(TokenSubjectEnum.AUTH.name(), token);
+    validateToken(token);
     UserDetails userDetails = userDetailsService.loadUserByUsername(getUsername(token));
     return new UsernamePasswordAuthenticationToken(
         userDetails, null, userDetails.getAuthorities());
@@ -87,21 +77,13 @@ public class JwtTokenProvider {
     return null;
   }
 
-  public void validateToken(String subject, String token) {
+  public void validateToken(String token) {
     assertNotNull(token, "JWT token doesn't exist");
     Jwts.parser().setSigningKey(jwtTokenProperties.getSecretKey()
         .getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token);
-    checkSubjectToken(subject, token);
     checkValidityPeriod(token);
     checkContainsInTokenBlackList(token);
     log.info("JWT token {} is valid", token);
-  }
-
-  private void checkSubjectToken(String subject, String token) {
-    if (subject != null && !getSubject(token).equals(subject)) {
-      log.info("JWT token {} is invalid", token);
-      throw new JwtException("JWT token is invalid");
-    }
   }
 
   private void checkContainsInTokenBlackList(String token) {
@@ -125,12 +107,6 @@ public class JwtTokenProvider {
         .parseClaimsJws(token).getBody().getId();
   }
 
-  public String getSubject(String token) {
-    return Jwts.parser()
-        .setSigningKey(jwtTokenProperties.getSecretKey().getBytes(StandardCharsets.UTF_8))
-        .parseClaimsJws(token).getBody().getSubject();
-  }
-
   public Date getExpirationDate(String token) {
     return Jwts.parser()
         .setSigningKey(jwtTokenProperties.getSecretKey().getBytes(StandardCharsets.UTF_8))
@@ -139,7 +115,7 @@ public class JwtTokenProvider {
 
   public void addToBlackList(HttpServletRequest request) {
     String token = getToken(request);
-    validateToken(TokenSubjectEnum.AUTH.name(), token);
+    validateToken(token);
     Date expirationDate = Jwts.parser().setSigningKey(jwtTokenProperties.getSecretKey()
         .getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody().getExpiration();
     tokenBlackList.put(token, expirationDate);
